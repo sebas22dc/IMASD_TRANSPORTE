@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="transporte lectura" uuid="6cbc762c-21b0-40ab-a90a-74a819bae1e5">
+      <driver-ref>a8ab1ce8-26e8-4967-9d50-c6f40b998a22</driver-ref>
+      <synchronize>true</synchronize>
+      <auto-commit>false</auto-commit>
+      <jdbc-driver>oracle.jdbc.OracleDriver</jdbc-driver>
+      <jdbc-url>jdbc:oracle:oci8:@transporte_medium</jdbc-url>
+      <jdbc-additional-properties>
+        <property name="TNSADMIN_DIR" value="$PROJECT_DIR$/../../../../Descargas/instantclient-basic-windows.x64-19.26.0.0.0dbru/instantclient_19_26/network/wallet" />
+      </jdbc-additional-properties>
+      <working-dir>$ProjectFileDir$</working-dir>
+      <vm-env>
+        <property name="ORACLE_HOME" value="path" />
+      </vm-env>
+    </data-source>
+  </component>
+</project>

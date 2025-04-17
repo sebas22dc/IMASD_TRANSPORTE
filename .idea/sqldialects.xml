@@ -4,5 +4,6 @@
     <file url="file://$PROJECT_DIR$/OracleScripts.sql" dialect="Oracle" />
     <file url="file://$PROJECT_DIR$/Tickets/0013_4940.sql" dialect="Oracle" />
     <file url="file://$PROJECT_DIR$/Tickets/0014_3273.sql" dialect="Oracle" />
+    <file url="file://$PROJECT_DIR$/Tickets/0042_7475_LISTO.sql" dialect="Oracle" />
   </component>
 </project>

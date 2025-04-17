@@ -1,0 +1,65 @@
+-- 6184
+-- 5000 0000 0069 2803 / 5000 0000 0007 4059
+-- mrczarld@gmail.com
+-- 9995933960
+-- "Se validan los números de tarejta 5000000000692803 y 5000000000074059,
+-- se observan que estan asociadas al correo electrónico cesar.lopez@medicamovil.com sin Número de Teléfono.
+--
+-- dba- se valida que el correo asociada a las tarjetas
+-- cesar.lopez@medicamovil.com, esta como ""eliminada o de baja""
+-- sin embargo las tarjetas  aun se encuentran vinculadas, dado el caso que la cuenta esta en ese estado se procede a.
+-- devincular las tarjetas asociadas a la cuenta con ese estado"
+-- Se informa que un usuario comenta que tenia 2 tarjetas ligadas a su cuenta
+-- una de tarifa general y una  tarifa social pero el usuario elimino esa
+-- cuenta que tenía el siguiente correo: lopez@medicamovil.com
+--     y cuando hizo una cuenta nueva e intento vincular sus 2 tarjetas le sale el mensaje que
+--     ambas tarjetas ya están vinculadas.
+
+
+
+SELECT * FROM APP.USUARIO                         WHERE UIDUSUARIO='a9398285-f6f9-4bcd-94ed-150d0689e235';
+SELECT * FROM APPMONEDEROCOMMAND.USUARIO          WHERE UIDUSUARIO='a9398285-f6f9-4bcd-94ed-150d0689e235';
+SELECT * FROM APPTICKETS.USUARIO                  WHERE UIDUSUARIO='a9398285-f6f9-4bcd-94ed-150d0689e235';
+SELECT * FROM PAGOS.USUARIO                       WHERE UIDUSUARIO='a9398285-f6f9-4bcd-94ed-150d0689e235';
+
+---UPDATES
+UPDATE APP.USUARIO SET BACTIVO=0,BBAJA=1                         WHERE UIDUSUARIO='a9398285-f6f9-4bcd-94ed-150d0689e235';COMMIT;
+UPDATE APPMONEDEROCOMMAND.USUARIO SET BACTIVO=0,BBAJA=1          WHERE UIDUSUARIO='a9398285-f6f9-4bcd-94ed-150d0689e235';COMMIT;
+UPDATE APPTICKETS.USUARIO SET BACTIVO=0,BBAJA=1                  WHERE UIDUSUARIO='a9398285-f6f9-4bcd-94ed-150d0689e235';COMMIT;
+UPDATE PAGOS.USUARIO SET BACTIVO=0,BBAJA=1                       WHERE UIDUSUARIO='a9398285-f6f9-4bcd-94ed-150d0689e235';COMMIT;
+
+
+----DESVINCULAR LAS TARJETAS DE LA SEGUNDA CUENTA, SOLO ESA CUENTA TIENE TARJETAS ASOCIADAS
+
+
+--Se actualizan registros dados de baja
+
+UPDATE APPMONEDEROQUERY.TARJETAUSUARIO SET BACTIVO = 0, BBAJA = 1
+--SELECT COUNT(0) FROM APPMONEDEROQUERY.TARJETAUSUARIO
+WHERE UIDTARJETA IN (
+SELECT t.UIDTARJETA
+FROM APPMONEDEROQUERY.TARJETAUSUARIO t
+INNER JOIN APPMONEDEROQUERY.ESTADODECUENTA e ON t.UIDMONEDERO = e.UIDMONEDERO
+INNER JOIN CREDENCIALIZACION.ESTATUSTARJETA et ON et.UIDESTATUSTARJETA = e.UIDESTATUSTARJETA
+INNER JOIN APPMONEDEROQUERY.USUARIO u ON t.UIDUSUARIO = u.UIDUSUARIO
+INNER JOIN APP.USUARIO usu ON u.UIDUSUARIO = usu.UIDUSUARIO
+WHERE 1=1 and (usu.BBAJA = 1 OR usu.BACTIVO = 0)
+AND t.BACTIVO = 1 AND usu.UIDUSUARIO = 'a9398285-f6f9-4bcd-94ed-150d0689e235'
+);commit;
+
+UPDATE APPMONEDEROCOMMAND.TARJETAUSUARIO SET BACTIVO = 0, BBAJA = 1
+--SELECT COUNT(0) FROM APPMONEDEROCOMMAND.TARJETAUSUARIO
+WHERE UIDTARJETA IN (
+SELECT am.UIDTARJETA
+FROM APPMONEDEROCOMMAND.TARJETAUSUARIO AM
+INNER JOIN APPMONEDEROCOMMAND.ESTADODECUENTA AE ON AE.UIDMONEDERO = AM.UIDMONEDERO
+INNER JOIN APPMONEDEROCOMMAND.USUARIO USU ON USU.UIDUSUARIO = AM.UIDUSUARIO
+INNER JOIN APP.USUARIO USU2 ON USU2.UIDUSUARIO = usu.UIDUSUARIO
+WHERE
+-- am.snumerotarjeta = 5000000000593414
+1=1
+AND USU2.BBAJA = 1
+AND AM.BACTIVO = 1
+AND USU2.UIDUSUARIO = 'a9398285-f6f9-4bcd-94ed-150d0689e235' --and am.snumerotarjeta = 5000000000593414
+);
+commit;

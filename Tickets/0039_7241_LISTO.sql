@@ -1,0 +1,35 @@
+--
+-- 7241
+-- dieghoperez@hmail.com
+-- dieghoperez@gmail.com
+-- Usuario reporta que no logra acceder a su cuenta de vayven ya que olvidó su contraseña
+-- y el correo está mal escrito por lo que no le llega mensaje para reestablecerlo, pide que
+-- se le cambie de HMAIL A GMAIL ya que cometió una equivocación.
+-- dieghoperez@hmail.com
+-- Corrección de correo
+
+
+
+
+
+
+
+
+SELECT * FROM NOTIFICACIONES.USUARIO WHERE UIDUSUARIO = '00491275-92d5-4713-97c5-d754b9dc91a3' FETCH FIRST 100 ROWS ONLY; --> ESTE SI ES PARA CAMBIO DE CORREO
+SELECT * FROM APP.USUARIO  WHERE UIDUSUARIO = '00491275-92d5-4713-97c5-d754b9dc91a3'     FETCH FIRST 100 ROWS ONLY;--> ESTE SI ES PARA CAMBIO DE CORREO
+SELECT * FROM PAGOS.USUARIO WHERE UIDUSUARIO = '00491275-92d5-4713-97c5-d754b9dc91a3' FETCH FIRST 100 ROWS ONLY; --> ESTE SI ES
+SELECT * FROM APPMONEDEROCOMMAND.USUARIO WHERE UIDUSUARIO = '00491275-92d5-4713-97c5-d754b9dc91a3' FETCH FIRST 100 ROWS ONLY; --> ESTE SI ES
+
+
+UPDATE APP.USUARIO SET SCORREO = 'dieghoperez@gmail.com' WHERE UIDUSUARIO = '00491275-92d5-4713-97c5-d754b9dc91a3';COMMIT;
+UPDATE APPMONEDEROCOMMAND.USUARIO SET SCORREO = 'dieghoperez@gmail.com' WHERE UIDUSUARIO = '00491275-92d5-4713-97c5-d754b9dc91a3';COMMIT;
+UPDATE NOTIFICACIONES.USUARIO SET SCORREO = 'dieghoperez@gmail.com'  WHERE UIDUSUARIO = '00491275-92d5-4713-97c5-d754b9dc91a3';COMMIT;
+UPDATE PAGOS.USUARIO SET SCORREO = 'dieghoperez@gmail.com'  WHERE UIDUSUARIO = '00491275-92d5-4713-97c5-d754b9dc91a3';COMMIT;
+
+
+
+
+
+
+
+

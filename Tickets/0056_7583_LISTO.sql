@@ -1,0 +1,48 @@
+-- 7583
+-- 1000000001503452
+-- moralesalessandra713@gmail.com
+-- 9994980717
+-- 5574845358
+-- "Usuario solicita cambiar los datos del número telefónico que tiene registrado en su app, menciona que
+--
+-- Ya no cuenta con el numero registrado y no puede acceder.
+--
+-- Corroborar con usuario ya que el numero telefonico nuevo ya esta asociado a otro correo
+-- lisamoralesmelendez25@gmail.com -> 5574845358
+-- Se reviso ambas cuentas y ninguno monedero tiene saldo por lo que se debe indicar que cuenta conservar.
+-- ""El usuario quiere conservar el correo moralesalessandra713@gmail.com a su  nuevo número 5574845358"""
+-- Cambio de número 5574845358 con  el correo moralesalessandra713@gmail.com	En proceso
+--
+--
+--
+--
+--
+
+
+--CAMBIO de telefono
+SELECT * FROM NOTIFICACIONES.USUARIO WHERE UIDUSUARIO = 'e00a6ebb-8428-4e39-bf86-dead1cbde86d' FETCH FIRST 100 ROWS ONLY; --> ESTE SI ES PARA CAMBIO DE CORREO
+SELECT * FROM APP.USUARIO  WHERE UIDUSUARIO = 'e00a6ebb-8428-4e39-bf86-dead1cbde86d'     FETCH FIRST 100 ROWS ONLY;--> ESTE SI ES PARA CAMBIO DE CORREO
+SELECT * FROM PAGOS.USUARIO WHERE UIDUSUARIO = 'e00a6ebb-8428-4e39-bf86-dead1cbde86d' FETCH FIRST 100 ROWS ONLY; --> ESTE SI ES
+SELECT * FROM APPMONEDEROCOMMAND.USUARIO WHERE UIDUSUARIO = 'e00a6ebb-8428-4e39-bf86-dead1cbde86d' FETCH FIRST 100 ROWS ONLY; --> ESTE SI ES
+
+
+UPDATE APP.USUARIO SET STELEFONO = '5574845358' WHERE UIDUSUARIO = 'e00a6ebb-8428-4e39-bf86-dead1cbde86d';COMMIT;
+UPDATE APPMONEDEROCOMMAND.USUARIO SET STELEFONO = '5574845358' WHERE UIDUSUARIO = 'e00a6ebb-8428-4e39-bf86-dead1cbde86d';COMMIT;
+UPDATE NOTIFICACIONES.USUARIO SET STELEFONO = '5574845358' WHERE UIDUSUARIO = 'e00a6ebb-8428-4e39-bf86-dead1cbde86d';COMMIT;
+UPDATE PAGOS.USUARIO SET STELEFONO = '5574845358' WHERE UIDUSUARIO = 'e00a6ebb-8428-4e39-bf86-dead1cbde86d';COMMIT;
+
+
+
+--BAJA DE CUENTA ANTIGUA
+
+SELECT * FROM APP.USUARIO                         WHERE UIDUSUARIO='f1613494-e6ba-4268-98f0-9b625db71168';
+SELECT * FROM APPMONEDEROCOMMAND.USUARIO          WHERE UIDUSUARIO='f1613494-e6ba-4268-98f0-9b625db71168';
+SELECT * FROM APPTICKETS.USUARIO                  WHERE UIDUSUARIO='f1613494-e6ba-4268-98f0-9b625db71168';
+SELECT * FROM PAGOS.USUARIO                       WHERE UIDUSUARIO='f1613494-e6ba-4268-98f0-9b625db71168';
+
+---UPDATES
+UPDATE APP.USUARIO SET BACTIVO=0,BBAJA=1                         WHERE UIDUSUARIO='f1613494-e6ba-4268-98f0-9b625db71168';COMMIT;
+UPDATE APPMONEDEROCOMMAND.USUARIO SET BACTIVO=0,BBAJA=1          WHERE UIDUSUARIO='f1613494-e6ba-4268-98f0-9b625db71168';COMMIT;
+UPDATE APPTICKETS.USUARIO SET BACTIVO=0,BBAJA=1                  WHERE UIDUSUARIO='f1613494-e6ba-4268-98f0-9b625db71168';COMMIT;
+UPDATE PAGOS.USUARIO SET BACTIVO=0,BBAJA=1                       WHERE UIDUSUARIO='f1613494-e6ba-4268-98f0-9b625db71168';COMMIT;
+

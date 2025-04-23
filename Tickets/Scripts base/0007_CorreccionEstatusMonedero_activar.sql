@@ -1,5 +1,3 @@
-
-
 ---Activar tarjeta y monedero
 --5000000000626711
 

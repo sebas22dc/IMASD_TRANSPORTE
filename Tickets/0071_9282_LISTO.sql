@@ -1,0 +1,47 @@
+-- 9282
+-- 5000000000038143
+-- Se valida y se observa que la tarjeta 5000000000038143 esta vinculada en la cuenta con correo
+-- aap060@hotmail.com y telefono 9995338569
+-- "Usuario informa que tenia una cuenta en otro
+-- dispositivo y tenia vinculada su tarjeta en ella pero su dispositivo se echó a
+-- perder y tuvo que comprar otro dispositivo e hizo una nueva cuenta pero
+-- no puede vincular su tarjeta por que ya esta vinculada en su otra cuenta
+-- . Lo que quiere hace es desvincular su tarjeta de su antigua cuenta para que él lo pueda vincular en nueva cuenta.
+--
+--  5000 0000 0003 8143
+-- Alonso Andrade Pacheco
+-- 9995338569
+-- alonsoandrade230760@gmail.com"
+-- Desvincular la tarjeta 5000000000038143 de la cuenta con correo aap060@hotmail.com
+
+
+
+UPDATE APPMONEDEROQUERY.TARJETAUSUARIO SET BACTIVO = 0, BBAJA = 1
+--SELECT COUNT(0) FROM APPMONEDEROQUERY.TARJETAUSUARIO
+WHERE UIDTARJETA IN (
+SELECT t.UIDTARJETA
+FROM APPMONEDEROQUERY.TARJETAUSUARIO t
+INNER JOIN APPMONEDEROQUERY.ESTADODECUENTA e ON t.UIDMONEDERO = e.UIDMONEDERO
+INNER JOIN CREDENCIALIZACION.ESTATUSTARJETA et ON et.UIDESTATUSTARJETA = e.UIDESTATUSTARJETA
+INNER JOIN APPMONEDEROQUERY.USUARIO u ON t.UIDUSUARIO = u.UIDUSUARIO
+INNER JOIN APP.USUARIO usu ON u.UIDUSUARIO = usu.UIDUSUARIO
+WHERE 1=1
+AND t.BACTIVO = 1 AND t.snumerotarjeta = '5000000000038143'
+);commit;
+
+
+UPDATE APPMONEDEROCOMMAND.TARJETAUSUARIO SET BACTIVO = 0, BBAJA = 1
+--SELECT COUNT(0) FROM APPMONEDEROCOMMAND.TARJETAUSUARIO
+WHERE UIDTARJETA IN (
+SELECT am.UIDTARJETA
+FROM APPMONEDEROCOMMAND.TARJETAUSUARIO AM
+INNER JOIN APPMONEDEROCOMMAND.ESTADODECUENTA AE ON AE.UIDMONEDERO = AM.UIDMONEDERO
+INNER JOIN APPMONEDEROCOMMAND.USUARIO USU ON USU.UIDUSUARIO = AM.UIDUSUARIO
+INNER JOIN APP.USUARIO USU2 ON USU2.UIDUSUARIO = usu.UIDUSUARIO
+WHERE
+-- am.snumerotarjeta = 5000000000593414
+1=1
+AND AM.BACTIVO = 1
+AND am.snumerotarjeta = '5000000000038143' --and am.snumerotarjeta = 5000000000593414
+);
+commit;

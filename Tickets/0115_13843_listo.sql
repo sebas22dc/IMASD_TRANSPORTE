@@ -1,3 +1,17 @@
+-- 13843
+-- 5000 0000 0027 1186
+-- santiagopersonal213@gmail.com
+-- 9992395468
+-- "Usuario solicita desvincular su tarjeta que no puede visualizar en su app
+-- Se detecta que tarjeta ya esta vinculada en una cuenta que esta parcialmente dada de baja esta cuenta era del usuario en cuestion por lo que se procede a realizar desvinculacion"	"No puede ver su tarjeta que registró en la app, al querer volver a realizar el registro esta le aparece como ya vinculada
+-- Santiago Miguel Iuit Chan
+-- santiagopersonal213@gmail.com
+-- 9992395468
+-- 5000 0000 0027 1186"	Desvincular/vincular tarjeta 5000000000271186
+-- Proceso	Jessi
+
+
+
 
 UPDATE APPMONEDEROQUERY.TARJETAUSUARIO SET BACTIVO = 0, BBAJA = 1
 --SELECT COUNT(0) FROM APPMONEDEROQUERY.TARJETAUSUARIO
@@ -9,7 +23,7 @@ INNER JOIN CREDENCIALIZACION.ESTATUSTARJETA et ON et.UIDESTATUSTARJETA = e.UIDES
 INNER JOIN APPMONEDEROQUERY.USUARIO u ON t.UIDUSUARIO = u.UIDUSUARIO
 INNER JOIN APP.USUARIO usu ON u.UIDUSUARIO = usu.UIDUSUARIO
 WHERE 1=1
-AND t.BACTIVO = 1 AND t.snumerotarjeta = '5000000000695015'
+AND t.BACTIVO = 1 AND t.snumerotarjeta = '5000000000271186'
 );commit;
 
 
@@ -25,6 +39,6 @@ WHERE
 -- am.snumerotarjeta = 5000000000593414
 1=1
 AND AM.BACTIVO = 1
-AND am.snumerotarjeta = '5000000000695015' --and am.snumerotarjeta = 5000000000593414
+AND am.snumerotarjeta = '5000000000271186' --and am.snumerotarjeta = 5000000000593414
 );
 commit;

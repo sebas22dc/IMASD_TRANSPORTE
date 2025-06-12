@@ -1,3 +1,13 @@
+-- 14752
+-- 5000000000948649
+-- geovannimay60@gmail.com
+-- geovannimaycanto@gmail.com
+--
+-- Desvinculacion de tarjeta
+-- Usuario reporta que perdió el acceso a su cuenta anterior por lo cual al crearse una nueva en esta ya no puede vincular su tarjeta ya que le aparece el mensaje “ya está vinculada”
+-- Proceso	Gael
+
+
 
 UPDATE APPMONEDEROQUERY.TARJETAUSUARIO SET BACTIVO = 0, BBAJA = 1
 --SELECT COUNT(0) FROM APPMONEDEROQUERY.TARJETAUSUARIO
@@ -9,8 +19,9 @@ INNER JOIN CREDENCIALIZACION.ESTATUSTARJETA et ON et.UIDESTATUSTARJETA = e.UIDES
 INNER JOIN APPMONEDEROQUERY.USUARIO u ON t.UIDUSUARIO = u.UIDUSUARIO
 INNER JOIN APP.USUARIO usu ON u.UIDUSUARIO = usu.UIDUSUARIO
 WHERE 1=1
-AND t.BACTIVO = 1 AND t.snumerotarjeta = '5000000000695015'
-);commit;
+AND t.BACTIVO = 1 AND t.snumerotarjeta = '5000000000948649'
+);
+commit;
 
 
 UPDATE APPMONEDEROCOMMAND.TARJETAUSUARIO SET BACTIVO = 0, BBAJA = 1
@@ -25,6 +36,15 @@ WHERE
 -- am.snumerotarjeta = 5000000000593414
 1=1
 AND AM.BACTIVO = 1
-AND am.snumerotarjeta = '5000000000695015' --and am.snumerotarjeta = 5000000000593414
+AND am.snumerotarjeta = '5000000000948649' --and am.snumerotarjeta = 5000000000593414
 );
 commit;
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,24 @@
+-- 14334
+-- 5000000000591436
+-- correo hijo: iuitmedinajesusyoary@gmail.com
+-- y correo usuario: Miguelcervan83@gmail.com
+-- teléfono hijo: 9994507359 y teléfono usuaio: 9902812933
+-- Usuario comenta que no puede vincular su tarjeta porque probablemente  este registrada en la cuenta de su hijo.	"Usuaria comenta que su tarjeta aparece como vinculada, sin embargo, indagando comenta que quizá su hijo la había vinculado antes pero su celular se le echó a perder
+--
+--  Datos de la APP del hijo:
+--
+-- 9994507359
+--
+-- Jesús Yoary Medina
+--
+-- iuitmedinajesusyoary@gmail.com
+--
+-- Desea que en caso de que este ahí registrada su tarjeta se desvincule, o desvincular en donde este registrada ya que esa tarjeta es de el y no puede vincularla.
+--
+-- Datos de él:
+--
+-- David Miguel González Cervantes
+--
+-- 9902812933
+--
+-- Miguelcervan83@gmail.com"	Desvincular la tarjeta 5000000000591436 de la cuenta de su hijo	Proceso	Jessi

@@ -21,7 +21,7 @@ select * FROM SINCRONIZADOR.cambiosmonedero where starjeta=&numBusqueda order by
 
 -- -- SIN ERROR
 -- --
-update SINCRONIZADOR.cambiosmonedero set uidlistacuentas = '00000000-0000-0000-0000-000000000000' where uidcambiosmonedero = 'd1289a86-b1d0-4c3d-bfc9-3d4024a86d40'; commit;
+-- update SINCRONIZADOR.cambiosmonedero set uidlistacuentas = '00000000-0000-0000-0000-000000000000' where uidcambiosmonedero = 'd1289a86-b1d0-4c3d-bfc9-3d4024a86d40'; commit;
 
 --misma tarjeta que el anterior
 

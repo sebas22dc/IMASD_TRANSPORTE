@@ -1,0 +1,22 @@
+-- 13885
+-- humbermay916@gmail.com
+-- 9997827667
+-- Eliminación de cuenta.
+-- El usuario solicita eliminar la cuenta de su anterior número telefónico
+-- 9997827667 correo humbermay916@gmail.com y curp MAXL900722HYNYXS07, por motivo de que cambió de número telefónico .		Proceso	Italo
+--
+
+
+
+SELECT * FROM APP.USUARIO                         WHERE UIDUSUARIO='f91a1a6b-44f9-4b5c-b3ee-7984953753e7';
+SELECT * FROM APPMONEDEROCOMMAND.USUARIO          WHERE UIDUSUARIO='f91a1a6b-44f9-4b5c-b3ee-7984953753e7';
+SELECT * FROM APPTICKETS.USUARIO                  WHERE UIDUSUARIO='f91a1a6b-44f9-4b5c-b3ee-7984953753e7';
+SELECT * FROM PAGOS.USUARIO                       WHERE UIDUSUARIO='f91a1a6b-44f9-4b5c-b3ee-7984953753e7';
+
+---UPDATES
+UPDATE APP.USUARIO SET BACTIVO=0,BBAJA=1                         WHERE UIDUSUARIO='f91a1a6b-44f9-4b5c-b3ee-7984953753e7';COMMIT;
+UPDATE APPMONEDEROCOMMAND.USUARIO SET BACTIVO=0,BBAJA=1          WHERE UIDUSUARIO='f91a1a6b-44f9-4b5c-b3ee-7984953753e7';COMMIT;
+UPDATE APPTICKETS.USUARIO SET BACTIVO=0,BBAJA=1                  WHERE UIDUSUARIO='f91a1a6b-44f9-4b5c-b3ee-7984953753e7';COMMIT;
+UPDATE PAGOS.USUARIO SET BACTIVO=0,BBAJA=1                       WHERE UIDUSUARIO='f91a1a6b-44f9-4b5c-b3ee-7984953753e7';COMMIT;
+
+

@@ -1,3 +1,11 @@
+-- 14731
+-- 5000000000521399
+-- santipadron911@gmail.com
+-- santipadron1608@gmail.com
+-- Desvinculacion de tarjeta de estudiante
+-- Usuario reporta lo siguiente: eliminé mi cuenta anterior donde tenía una tarjeta de estudiante vinculada entonces ayer que cree una nueva y quiero agregar mi tarjeta dice que ya está vinculada y no deja agregarla		Proceso	Gael
+
+
 
 UPDATE APPMONEDEROQUERY.TARJETAUSUARIO SET BACTIVO = 0, BBAJA = 1
 --SELECT COUNT(0) FROM APPMONEDEROQUERY.TARJETAUSUARIO
@@ -9,7 +17,7 @@ INNER JOIN CREDENCIALIZACION.ESTATUSTARJETA et ON et.UIDESTATUSTARJETA = e.UIDES
 INNER JOIN APPMONEDEROQUERY.USUARIO u ON t.UIDUSUARIO = u.UIDUSUARIO
 INNER JOIN APP.USUARIO usu ON u.UIDUSUARIO = usu.UIDUSUARIO
 WHERE 1=1
-AND t.BACTIVO = 1 AND t.snumerotarjeta = '5000000000695015'
+AND t.BACTIVO = 1 AND t.snumerotarjeta = '5000000000521399'
 );commit;
 
 
@@ -25,6 +33,6 @@ WHERE
 -- am.snumerotarjeta = 5000000000593414
 1=1
 AND AM.BACTIVO = 1
-AND am.snumerotarjeta = '5000000000695015' --and am.snumerotarjeta = 5000000000593414
+AND am.snumerotarjeta = '5000000000521399' --and am.snumerotarjeta = 5000000000593414
 );
 commit;

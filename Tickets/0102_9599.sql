@@ -1,0 +1,18 @@
+-- 9599
+-- "5000 0000 0024 9456
+--
+--  5000 0000 0021 7111"
+-- papayinvalenzuela@gmail.com
+-- Usuario desea que se desvinculen esas dos tarjetas de su correo anterior por el nuevo pero solo se proporcione el correo papayinvalenzuela@gmail.com
+--
+--
+-- "Usuario informa que quiere desvincular 2 tarjetas de su antigua cuenta por que ya tiene una nueva cuenta, pero no tiene acceso a su antigua cuenta. El usuario es adulto mayor y en el modulo de san benito lo ayudaron a crear una nueva cuenta por que su teléfono anterior no tiene acceso a el
+--
+-- 1:5000 0000 0024 9456 adulto mayor
+-- 2: 5000 0000 0021 7111 general
+-- Melquiades Que Valenzuela
+-- 9991747055
+-- papayinvalenzuela@gmail.com"		Pendiente	Mercy
+--
+--
+--

@@ -1,3 +1,9 @@
+-- 5000000000474953
+-- mexpatricia795@gmail.com
+-- Vincular desvincular tarjeta
+-- Usuario solicita apoyo en desvincular tarjeta.
+-- Pendiente	Italo
+
 
 UPDATE APPMONEDEROQUERY.TARJETAUSUARIO SET BACTIVO = 0, BBAJA = 1
 --SELECT COUNT(0) FROM APPMONEDEROQUERY.TARJETAUSUARIO
@@ -9,7 +15,7 @@ INNER JOIN CREDENCIALIZACION.ESTATUSTARJETA et ON et.UIDESTATUSTARJETA = e.UIDES
 INNER JOIN APPMONEDEROQUERY.USUARIO u ON t.UIDUSUARIO = u.UIDUSUARIO
 INNER JOIN APP.USUARIO usu ON u.UIDUSUARIO = usu.UIDUSUARIO
 WHERE 1=1
-AND t.BACTIVO = 1 AND t.snumerotarjeta = '5000000000695015'
+AND t.BACTIVO = 1 AND t.snumerotarjeta = '5000000000474953'
 );commit;
 
 
@@ -25,6 +31,6 @@ WHERE
 -- am.snumerotarjeta = 5000000000593414
 1=1
 AND AM.BACTIVO = 1
-AND am.snumerotarjeta = '5000000000695015' --and am.snumerotarjeta = 5000000000593414
+AND am.snumerotarjeta = '5000000000474953' --and am.snumerotarjeta = 5000000000593414
 );
 commit;

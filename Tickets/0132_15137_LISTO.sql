@@ -1,0 +1,12 @@
+-- 15137
+-- 5000000000903813
+--
+--
+--
+--
+--
+-- Posible tema desfazado
+-- Usuario reporta que su tarjeta 5000 0000 0090 3813 no pasa desde el 23 de mayo, cuenta con un saldo de $78 por lo que pide puedan apoyar con su situación.
+--
+-- Proceso
+-- Gael

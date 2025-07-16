@@ -1,3 +1,18 @@
+-- 17598	5000000000642488		manuelbenlli0@gmail.com		9993238472		Se realizaron las consultas respectivas y se visualiza que el usuario tiene el número de tarjeta con otro número de celular y otro correo por eso solicita que se le desvincule en la cuenta mencionada	"Usuario reporta que su tarjeta sale como vinculada y jamás lo ha hecho ni la ha prestado solicita se desvincule de donde esté para el poder vincularla en su App
+
+ 
+
+-- Manuel Alfonso Canul Sosa
+
+--  manuelalfcss@gmail.com
+
+-- 999 582 1221
+
+-- 5000000000642488"	Realizar la desvinculación de la tarjeta
+--  5000000000642488 que se encuentra en el número de teléfono 9993238472	Pendiente	Jessi			
+-- Documento
+
+
 
 UPDATE APPMONEDEROQUERY.TARJETAUSUARIO SET BACTIVO = 0, BBAJA = 1
 --SELECT COUNT(0) FROM APPMONEDEROQUERY.TARJETAUSUARIO
@@ -9,9 +24,8 @@ INNER JOIN CREDENCIALIZACION.ESTATUSTARJETA et ON et.UIDESTATUSTARJETA = e.UIDES
 INNER JOIN APPMONEDEROQUERY.USUARIO u ON t.UIDUSUARIO = u.UIDUSUARIO
 INNER JOIN APP.USUARIO usu ON u.UIDUSUARIO = usu.UIDUSUARIO
 WHERE 1=1
-AND t.BACTIVO = 1 AND t.snumerotarjeta = '5000000000695015'
-)
-;commit;
+AND t.BACTIVO = 1 AND t.snumerotarjeta = '5000000000642488'
+);commit;
 
 
 UPDATE APPMONEDEROCOMMAND.TARJETAUSUARIO SET BACTIVO = 0, BBAJA = 1
@@ -26,6 +40,6 @@ WHERE
 -- am.snumerotarjeta = 5000000000593414
 1=1
 AND AM.BACTIVO = 1
-AND am.snumerotarjeta = '5000000000695015' --and am.snumerotarjeta = 5000000000593414
+AND am.snumerotarjeta = '5000000000642488' --and am.snumerotarjeta = 5000000000593414
 );
 commit;

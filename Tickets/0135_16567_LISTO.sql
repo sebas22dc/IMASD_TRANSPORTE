@@ -1,3 +1,17 @@
+16567	
+5000000000397426	
+	joshuaser@live.com	
+		9331077469		
+			"Registro su tarjeta en la app, pero esta no aparece en la app
+Josué Heriberto Serna Hernández
+9331077469 (número registrado en app)
+SEHJ760915HDFRRS07
+joshuaser@live.com"	
+Desvincular tarjeta de la cuenta	
+Proceso	Mercy			
+Documento
+
+
 
 UPDATE APPMONEDEROQUERY.TARJETAUSUARIO SET BACTIVO = 0, BBAJA = 1
 --SELECT COUNT(0) FROM APPMONEDEROQUERY.TARJETAUSUARIO
@@ -9,9 +23,8 @@ INNER JOIN CREDENCIALIZACION.ESTATUSTARJETA et ON et.UIDESTATUSTARJETA = e.UIDES
 INNER JOIN APPMONEDEROQUERY.USUARIO u ON t.UIDUSUARIO = u.UIDUSUARIO
 INNER JOIN APP.USUARIO usu ON u.UIDUSUARIO = usu.UIDUSUARIO
 WHERE 1=1
-AND t.BACTIVO = 1 AND t.snumerotarjeta = '5000000000695015'
-)
-;commit;
+AND t.BACTIVO = 1 AND t.snumerotarjeta = '5000000000397426'
+);commit;
 
 
 UPDATE APPMONEDEROCOMMAND.TARJETAUSUARIO SET BACTIVO = 0, BBAJA = 1
@@ -26,6 +39,6 @@ WHERE
 -- am.snumerotarjeta = 5000000000593414
 1=1
 AND AM.BACTIVO = 1
-AND am.snumerotarjeta = '5000000000695015' --and am.snumerotarjeta = 5000000000593414
+AND am.snumerotarjeta = '5000000000397426' --and am.snumerotarjeta = 5000000000593414
 );
 commit;

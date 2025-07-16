@@ -1,0 +1,31 @@
+16940		
+	alelizpe@icloud.com
+    	alelizpe@aol.com	
+    9992079397		
+    Se verifico datos de ticket de usuario y si coincide con el sistema.
+    	"Desea cambiar su correo electrónico de la app por el siguiente: alelizpe@aol.com
+
+Alejandro Lizarraga Perez
+
+LIPA980104HYNZRL09
+
+9992079397
+
+alelizpe@icloud.com"	Realizar cambio de correo: alelizpe@icloud.com al correo nuevo: alelizpe@aol.com	
+Proceso
+Jessi	
+
+
+
+
+
+SELECT * FROM NOTIFICACIONES.USUARIO WHERE UIDUSUARIO = '592aa8f4-08de-4d37-ab68-8f5217262d0b' FETCH FIRST 100 ROWS ONLY; --> ESTE SI ES PARA CAMBIO DE CORREO
+SELECT * FROM APP.USUARIO  WHERE UIDUSUARIO = '592aa8f4-08de-4d37-ab68-8f5217262d0b'     FETCH FIRST 100 ROWS ONLY;--> ESTE SI ES PARA CAMBIO DE CORREO
+SELECT * FROM PAGOS.USUARIO WHERE UIDUSUARIO = '592aa8f4-08de-4d37-ab68-8f5217262d0b' FETCH FIRST 100 ROWS ONLY; --> ESTE SI ES
+SELECT * FROM APPMONEDEROCOMMAND.USUARIO WHERE UIDUSUARIO = '592aa8f4-08de-4d37-ab68-8f5217262d0b' FETCH FIRST 100 ROWS ONLY; --> ESTE SI ES
+
+
+UPDATE APP.USUARIO SET SCORREO = 'alelizpe@aol.com' WHERE UIDUSUARIO = '592aa8f4-08de-4d37-ab68-8f5217262d0b';COMMIT;
+UPDATE APPMONEDEROCOMMAND.USUARIO SET SCORREO = 'alelizpe@aol.com' WHERE UIDUSUARIO = '592aa8f4-08de-4d37-ab68-8f5217262d0b';COMMIT;
+UPDATE NOTIFICACIONES.USUARIO SET SCORREO = 'alelizpe@aol.com' WHERE UIDUSUARIO = '592aa8f4-08de-4d37-ab68-8f5217262d0b';COMMIT;
+UPDATE PAGOS.USUARIO SET SCORREO = 'alelizpe@aol.com' WHERE UIDUSUARIO = '592aa8f4-08de-4d37-ab68-8f5217262d0b';COMMIT;

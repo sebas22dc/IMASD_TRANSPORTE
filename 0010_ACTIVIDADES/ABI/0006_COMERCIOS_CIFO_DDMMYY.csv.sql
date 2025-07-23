@@ -37,8 +37,8 @@ and co.snombregrupocomercial = 'Cajero' and co.scomercio like 'CIFO%' and o.sest
 	left join comercio.logventadetalle lvd3 on lvd3.uidlogventa=lv.uidlogventa and lvd3.sestatus='OPERACIÓN DETALLE GUARDADA'
 	left join comercio.logventadetalle lvd4 on lvd4.uidlogventa=lv.uidlogventa and lvd4.sestatus='CONFIRMACIÓN DE SALDO PROTEGIDO'
 	left join comercio.logventadetalle lvd5 on lvd5.uidlogventa=lv.uidlogventa and lvd5.sestatus='EXITOSA'
-where o.DTFECHAOPERACION >= TO_DATE('26-06-2025 00:00:00', 'DD-MM-YYYY HH24:MI:SS')
-    AND o.DTFECHAOPERACION < TO_DATE('01-07-2025 00:00:00', 'DD-MM-YYYY HH24:MI:SS')
+where o.DTFECHAOPERACION >= TO_DATE('14-06-2025 00:00:00', 'DD-MM-YYYY HH24:MI:SS')
+    AND o.DTFECHAOPERACION < TO_DATE('15-07-2025 00:00:00', 'DD-MM-YYYY HH24:MI:SS')
 and co.snombregrupocomercial = 'Cajero' and co.scomercio like 'CIFO%' and o.sestatustransaccion = 'CONFIRMADA'
 and x.sfolioventa is null
 order by o.DTFECHAOPERACION desc

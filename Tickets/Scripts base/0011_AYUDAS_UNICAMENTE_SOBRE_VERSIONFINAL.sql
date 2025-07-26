@@ -101,8 +101,8 @@ select inumerotarjeta,
 ) XX ON XX.inumerotarjeta = E.INUMTARJETA
   WHERE 
  1=1
-   AND E.DSALDO <= -12 
- --AND E.SESTATUS = 'ACTIVO'
+   AND E.DSALDO < -12 
+   AND E.SESTATUS = 'ACTIVO'
   -- AND E.UIDMONEDERO = 'dc94aea1-d497-4ef9-b9fb-b16d8d9bc044'
  AND E.INUMMONEDERO = 1000000000981115 --> cuando sea por lote esto se debe de quitar
 ;
@@ -110,12 +110,14 @@ select inumerotarjeta,
 
 -- select * from PREP_MONEDEROCOMANDOS.MOVIMIENTOSESTADOSDECUENTA where uidtipooperacion = '3808fb45-5062-e551-e063-0400020af699';
 select * from PREP_MONEDEROCOMANDOS.MOVIMIENTOSESTADOSDECUENTA where UIDOPERACION = '3995b58f-13dd-1bc8-e063-0400000a5732';
-
-
 -- select * from PREP_monederoconsultas.movimientos where uidmonedero = (select uidmonedero from prep_credencializacion.tarjetas where  inumeromonedero = '1000000000981115');
+
+select * from prep_sincronizador.monedero where uidmonedero in ('680ceed8-6f13-4e77-9782-773dd3e99257','dc94aea1-d497-4ef9-b9fb-b16d8d9bc044');
+select * from PREP_SINCRONIZADOR.DETALLESINCRONIZACIONTRANSACCIONESNFC where inumerotarjeta = '5000000000980016' order by dtfechaoperacion desc;
 
 select * from PREP_monederoconsultas.movimientos where UIDOPERACION = '3995b58f-13dd-1bc8-e063-0400000a5732';
 
+commit;
 ----------------
 select dsaldo from prep_appmonederocommand.estadodecuenta
 where uidmonedero = (select uidmonedero from prep_credencializacion.tarjetas where  inumeromonedero = '1000000000981115');
@@ -131,10 +133,24 @@ where uidmonedero = (select uidmonedero from prep_credencializacion.tarjetas whe
 ---pagos.estadodecuenta sumar monto agregado en DSALDO
 commit;
 
+--#reversiones
+
+select * from PREP_MONEDEROCOMANDOS.MOVIMIENTOSESTADOSDECUENTA where uidtipooperacion = '3808fb45-5062-e551-e063-0400020af699';
+-- delete from PREP_MONEDEROCOMANDOS.MOVIMIENTOSESTADOSDECUENTA where uidoperacion = '399b80df-df41-2ff3-e063-0400000af27f';
+-- delete from PREP_monederoconsultas.movimientos where uidoperacion = '399b80df-df41-2ff3-e063-0400000af27f';
+
+-- update prep_appmonederocommand.estadodecuenta set DSALDO = DSALDO-23
+-- where uidmonedero = (select uidmonedero from prep_credencializacion.tarjetas where  inumeromonedero = '1000000000981115');
+-- ----------------------------------------
+-- update prep_monederoconsultas.estadodecuenta set DSALDO = DSALDO-23
+-- where uidmonedero = (select uidmonedero from prep_credencializacion.tarjetas where  inumeromonedero = '1000000000981115');
+-- ------------------------------------------------------
+-- update prep_appmonederoquery.estadodecuenta set DSALDO = DSALDO-23
+-- where uidmonedero = (select uidmonedero from prep_credencializacion.tarjetas where  inumeromonedero = '1000000000981115');
+-- --------------------------------------------------------------
 -- update prep_pagos.estadodecuenta set DSALDO = DSALDO-23
 -- where uidmonedero = (select uidmonedero from prep_credencializacion.tarjetas where  inumeromonedero = '1000000000981115');
-
-
+-- --#reversiones end
 select * from PREP_temp_registros_ajustar;
 
 select * from PREP_MONEDEROCOMANDOS.MOVIMIENTOSESTADOSDECUENTA where UIDMOVIMIENTOESTADODECUENTA = '3995b58f-13b5-1bc8-e063-0400000a5732';

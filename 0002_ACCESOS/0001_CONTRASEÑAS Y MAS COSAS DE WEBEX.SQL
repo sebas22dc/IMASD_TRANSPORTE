@@ -1,0 +1,107 @@
+-- -- -- -- -- este es el usuario para qa, es de solo lectura no lo compartas con nadie que no sea de tu area porfa
+-- -- -- -- -- usuario: USR_LECTURA
+-- -- -- -- -- contraseña: iVC4uueTWX
+
+
+
+
+
+
+
+
+
+
+-- -- -- ABIEZER
+
+-- -- -- -- -- Credenciales OCI PROD
+-- -- -- -- user: USR_DBA
+-- -- -- -- Pass: AsQ38XQVfI 
+
+
+-- -- -- sino prueba este:
+-- -- -- QA
+-- -- -- U:
+-- -- -- qa_dba
+-- -- -- P:
+-- -- -- MRPdba$qa
+
+
+
+
+-- -- -- consulta del dia para detectar errores en validadores 
+-- -- SELECT /*+ FULL(NFC) FULL(M) FULL(R) FULL(V) FULL(AU) FULL(AV) LEADING(NFC M) PARALLEL(NFC 4) */
+-- --     TRUNC(NFC.DTFECHAOPERACION) AS DTFECHAOPERACION,
+-- --     TRUNC(NFC.DTFECHACREACION) DTFECHACREACION,
+-- --     --NFC.STIPOTARIFA,
+-- --     CASE
+-- --         WHEN NFC.IERROR = 0 THEN 'Confirmada'
+-- --         WHEN NFC.IERROR = 5 AND TOKENTRANSACCION != '00000000000000000000000000000000' THEN 'Confirmada'
+-- --         WHEN NFC.IERROR = 5 AND TOKENTRANSACCION = '00000000000000000000000000000000' THEN 'Error en lectura'
+-- --         WHEN NFC.IERROR = 1 THEN 'Tarjeta expirada'
+-- --         WHEN NFC.IERROR = 2 THEN 'Sin saldo'
+-- --         WHEN NFC.IERROR = 3 THEN 'Deny list'
+-- --         WHEN NFC.IERROR = 4 THEN 'Tarjeta no soportada'
+-- --         WHEN NFC.IERROR = 6 THEN 'Falta configurar tarifa'
+-- --         WHEN NFC.IERROR = 7 THEN 'Error en recarga'
+-- --         WHEN NFC.IERROR = 100 THEN 'Tarjeta recargada'
+-- --         ELSE 'Otro'
+-- --     END AS ESTADOTRANSACCION,
+-- --     R.SCLAVERUTA,
+-- --     R.SRUTA,
+-- --     V.SVALIDADOR,
+-- --     V.SMODELO,
+-- --     AU.SNUMECO,
+-- --     COUNT(*) AS TOTAL_PASAJEROS
+-- -- FROM SINCRONIZADOR.DETALLESINCRONIZACIONTRANSACCIONESNFC NFC
+-- -- INNER JOIN SINCRONIZADOR.MONEDERO M 
+-- --     ON M.INUMEROTARJETA = NFC.INUMEROTARJETA AND M.INUMEROTARJETA > 0
+-- -- LEFT JOIN SINCRONIZADOR.RUTAS R 
+-- --     ON R.SCLAVERUTA = NFC.IRUTA
+-- -- LEFT JOIN SINCRONIZADOR.VALIDADORES V 
+-- --     ON V.UIDVALIDADOR = NFC.UIDVALIDADOR
+-- -- LEFT JOIN CATALOGOS.AUTOBUSVALIDADOR AV 
+-- --     ON AV.UIDVALIDADOR = V.UIDVALIDADOR AND AV.BACTIVO = 1
+-- -- LEFT JOIN SINCRONIZADOR.AUTOBUSES AU 
+-- --     ON AU.UIDAUTOBUS = AV.UIDAUTOBUS
+-- -- WHERE 
+-- --     TRUNC(NFC.DTFECHAOPERACION) > TRUNC(SYSDATE - 1)
+-- --     AND NFC.IERROR != 0
+-- --     and NFC.IERROR IN (6) -- EN ESTA SECCION SE PUEDE COMENTAR O AGREGAR LOS ERROES A VISUALIZAR
+-- -- GROUP BY 
+-- --     TRUNC(NFC.DTFECHAOPERACION),
+-- --     TRUNC(NFC.DTFECHACREACION) ,
+-- --     --NFC.STIPOTARIFA,
+-- --     CASE
+-- --         WHEN NFC.IERROR = 0 THEN 'Confirmada'
+-- --         WHEN NFC.IERROR = 5 AND TOKENTRANSACCION != '00000000000000000000000000000000' THEN 'Confirmada'
+-- --         WHEN NFC.IERROR = 5 AND TOKENTRANSACCION = '00000000000000000000000000000000' THEN 'Error en lectura'
+-- --         WHEN NFC.IERROR = 1 THEN 'Tarjeta expirada'
+-- --         WHEN NFC.IERROR = 2 THEN 'Sin saldo'
+-- --         WHEN NFC.IERROR = 3 THEN 'Deny list'
+-- --         WHEN NFC.IERROR = 4 THEN 'Tarjeta no soportada'
+-- --         WHEN NFC.IERROR = 6 THEN 'Falta configurar tarifa'
+-- --         WHEN NFC.IERROR = 7 THEN 'Error en recarga'
+-- --         WHEN NFC.IERROR = 100 THEN 'Tarjeta recargada'
+-- --         ELSE 'Otro'
+-- --     END,
+-- --     R.SCLAVERUTA,
+-- --     R.SRUTA,
+-- --     V.SVALIDADOR,
+-- --     V.SMODELO,
+-- --     AU.SNUMECO; 
+
+
+-- -----------------RECUERDA SIEMPRE DEBES HACER ESTE ES TU PENDIENTE GENERAL ----> 25/07/2025
+-- MERGE INTO comercioconsultas.operaciones cc
+-- USING (
+-- SELECT uidoperacion,
+-- uidproducto,
+-- ROW_NUMBER() OVER (ORDER BY DTFECHACREACION DESC) AS RN
+-- FROM comercio.operaciones
+-- order by RN asc
+-- ) c
+-- ON (cc.uidoperacion = c.uidoperacion AND cc.uidproducto IS NULL)
+-- WHEN MATCHED THEN
+-- UPDATE SET cc.uidproducto = c.uidproducto where c.RN <=1000000 and cc.UIDPRODUCTO is null;
+
+-- Asi lo limite aunque lo malo es que es manual

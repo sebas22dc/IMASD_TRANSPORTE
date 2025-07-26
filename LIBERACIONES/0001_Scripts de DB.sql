@@ -165,6 +165,8 @@ WHERE EXISTS (
 
 
 
+---------------------------------25 07 2025 
+----------------RECOERDAR ESTE FIN DE SEMANA GENERAR ESTA ACTUALIZACION
 MERGE INTO comercioconsultas.operaciones cc
 USING (
  SELECT uidoperacion,
@@ -179,6 +181,7 @@ UPDATE SET cc.uidproducto = c.uidproducto where c.RN <=1000000 and cc.UIDPRODUCT
 
 
 
+-------------------
 
 
 

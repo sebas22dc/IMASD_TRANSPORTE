@@ -29,4 +29,4 @@ COMMIT;
 --group by trunc(o.dtfechaoperacion)
 --order by trunc(o.dtfechaoperacion) desc;
 
--1560
+--1560

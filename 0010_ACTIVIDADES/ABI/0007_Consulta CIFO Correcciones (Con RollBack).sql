@@ -121,14 +121,17 @@ order by o.DTFECHAOPERACION desc
 -----------------VERSION 2 ABI
 -- CONSULTA PARA CANCELADAS DE CIFO
 
+
 with canceladas as (
 select coop.ifoliocomercio
 from COMERCIOCONSULTAS.operaciones  o
 inner join comercio.comercios co on co.uidcomercio = o.uidcomercio
 left join catalogos.estatus e on e.uidestatus = co.uidestatus
     left join comercio.operaciones coop on coop.uidoperacion=o.uidoperacion
-    where soperacion = 'Cancelada' and coop.ifoliocomercio in('11615017300525')
+    where soperacion = 'Cancelada'
     and co.snombregrupocomercial = 'Cajero' and co.scomercio like 'CIFO%'
+    AND o.DTFECHAOPERACION >= TO_DATE('29-05-2025 00:00:00', 'DD-MM-YYYY HH24:MI:SS')
+    AND o.DTFECHAOPERACION < TO_DATE('30-05-2025 00:00:00', 'DD-MM-YYYY HH24:MI:SS')
 )
 select soperacion as "OPERACIÓN", co.inumcomercio "CLIENTE", co.scomercio "COMERCIO" , o.sfolioventa "FOLIO", coop.ifoliocomercio "FOLIOCOMERCIO", trunc(o.dtfechaoperacion) "FECHA",
 to_char(o.dtfechaoperacion, 'HH24:MI') "HORA", to_char(o.dtfechaoperacion,'DD/MM/YYYY HH24:MI:SS') FECHAHORA,
@@ -154,13 +157,10 @@ left join catalogos.estatus e on e.uidestatus = co.uidestatus
     left join comercio.logventadetalle lvd3 on lvd3.uidlogventa=lv.uidlogventa and lvd3.sestatus='OPERACIÓN DETALLE GUARDADA'
     left join comercio.logventadetalle lvd4 on lvd4.uidlogventa=lv.uidlogventa and lvd4.sestatus='CONFIRMACIÓN DE SALDO PROTEGIDO'
     left join comercio.logventadetalle lvd5 on lvd5.uidlogventa=lv.uidlogventa and lvd5.sestatus='EXITOSA'
-where o.DTFECHAOPERACION >= TO_DATE('30-05-2025 00:00:00', 'DD-MM-YYYY HH24:MI:SS')
-    AND o.DTFECHAOPERACION < TO_DATE('01-06-2025 00:00:00', 'DD-MM-YYYY HH24:MI:SS')
+where 1=1
 and co.snombregrupocomercial = 'Cajero' and co.scomercio like 'CIFO%'
 and coop.ifoliocomercio in(select ifoliocomercio from canceladas)
 order by o.DTFECHAOPERACION desc 
-
-
 
 
 

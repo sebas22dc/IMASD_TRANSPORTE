@@ -4,12 +4,24 @@
 -- paso 3: exit;
 -- paso 4: lsnrctl start
 
+
+----LIMPIEZA DE BD  DEV O QA
+
+--ALTER TABLESPACE TEMP SHRINK TEMPFILE '/oradata/TRANSPORTE/temp01.dbf' KEEP 5000M;  --> intenta reducir el tamaño del tablespace temporal,
+--SELECT tablespace_name,  SUM(bytes_used)/1024/1024 AS used_MB,  SUM(bytes_free)/1024/1024 AS free_MB FROM v$temp_space_header GROUP BY tablespace_name;
+
+--ALTER DATABASE DATAFILE '/oradata2/transporte/DATA01.dbf' AUTOEXTEND ON NEXT 100M MAXSIZE 17G;--> aumentar el tamaño de la base de datos
+
+SELECT tablespace_name, file_name, bytes/1024/1024 AS MB, autoextensible FROM dba_data_files WHERE tablespace_name = 'DATA';
+
+
 -- /oradata/app/oracle/diag/rdbms/transporte/TRANSPORTE/trace
 
 
 -- CREATE USER usr_dba_dev IDENTIFIED BY "VG4Bf5r1";
 -- grant all privilegies to usr_dba_dev; 
 -- GRANT UNLIMITED TABLESPACE TO usr_dba_dev;
+
 
 -----
 -- create user usr_dba_dev with 'VG4Bf5r1';

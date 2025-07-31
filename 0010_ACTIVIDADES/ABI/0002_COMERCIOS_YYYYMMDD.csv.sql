@@ -59,7 +59,7 @@ order by o.DTFECHAOPERACION desc;
 -- NOMBRE DE ARCHIVO: COMERCIOS_YYYYMMDD.csv
 -- RUTA DEL ARCHIVO: /sftp/comercios_admin
 
-select o.soperacion as "OPERACION", co.inumcomercio "CLIENTE", co.scomercio "COMERCIO" , o.sfolioventa "FOLIO", trunc(o.dtfechaoperacion) "FECHA", to_char(o.dtfechaoperacion, ''HH24:MI'') "HORA"
+select o.soperacion as "OPERACION", co.inumcomercio "CLIENTE", co.scomercio "COMERCIO" , o.sfolioventa "FOLIO", TO_CHAR(trunc(o.dtfechaoperacion), 'dd/MM/yyyy HH24:MI:SS')  "FECHA", to_char(o.dtfechaoperacion, ''HH24:MI'') "HORA"
 ,o.sestatustransaccion "ESTATUS", o.dmontoventa "MONTO DE VENTA",
 --o.dmontocobrado "MONTO COBRADO",
 o.dmontoventa-(o.dmontoventa*case

@@ -178,8 +178,8 @@ left join catalogos.estatus e on e.uidestatus = co.uidestatus
     left join comercio.operaciones coop on coop.uidoperacion=o.uidoperacion
     where soperacion = ''Cancelada''
     and co.snombregrupocomercial = ''Cajero'' and co.scomercio like ''CIFO%''
-    AND o.DTFECHAOPERACION >= TRUNC(SYSDATE - 1)
-    AND o.DTFECHAOPERACION < TRUNC(SYSDATE )
+    AND o.DTFECHAOPERACION >= TRUNC(SYSDATE - [DESDE_MAS])
+    AND o.DTFECHAOPERACION < TRUNC(SYSDATE - [HASTA])
 )
 select soperacion as "OPERACIÓN", co.inumcomercio "CLIENTE", co.scomercio "COMERCIO" , o.sfolioventa "FOLIO", coop.ifoliocomercio "FOLIOCOMERCIO", trunc(o.dtfechaoperacion) "FECHA",
 to_char(o.dtfechaoperacion, ''HH24:MI'') "HORA", to_char(o.dtfechaoperacion,''DD/MM/YYYY HH24:MI:SS'') FECHAHORA,

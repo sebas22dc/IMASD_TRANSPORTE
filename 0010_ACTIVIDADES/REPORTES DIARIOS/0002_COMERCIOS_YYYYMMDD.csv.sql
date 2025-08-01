@@ -55,11 +55,11 @@ order by o.DTFECHAOPERACION desc;
 
 ----------------------VERSION DE SEBAS
 
---COMERCIOS
+--COMERCIOS 
 -- NOMBRE DE ARCHIVO: COMERCIOS_YYYYMMDD.csv
 -- RUTA DEL ARCHIVO: /sftp/comercios_admin
 
-select o.soperacion as "OPERACION", co.inumcomercio "CLIENTE", co.scomercio "COMERCIO" , o.sfolioventa "FOLIO", TO_CHAR(trunc(o.dtfechaoperacion), 'dd/MM/yyyy HH24:MI:SS')  "FECHA", to_char(o.dtfechaoperacion, ''HH24:MI'') "HORA"
+select o.soperacion as "OPERACION", co.inumcomercio "CLIENTE", co.scomercio "COMERCIO" , o.sfolioventa "FOLIO", TO_CHAR(trunc(o.dtfechaoperacion), ''dd/MM/yyyy HH24:MI:SS'')  "FECHA", to_char(o.dtfechaoperacion, ''HH24:MI'') "HORA"
 ,o.sestatustransaccion "ESTATUS", o.dmontoventa "MONTO DE VENTA",
 --o.dmontocobrado "MONTO COBRADO",
 o.dmontoventa-(o.dmontoventa*case
@@ -93,7 +93,8 @@ from COMERCIOCONSULTAS.operaciones  o
 inner join comercio.comercios co on co.uidcomercio = o.uidcomercio
 inner join catalogos.estatus e on e.uidestatus = co.uidestatus
     left join comercio.operaciones op on op.uidoperacion=o.uidoperacion
-where o.DTFECHAOPERACION >= TRUNC(SYSDATE - 1)
-AND o.DTFECHAOPERACION < TRUNC(SYSDATE)
-order by o.DTFECHAOPERACION desc;
+where o.DTFECHAOPERACION >= TRUNC(SYSDATE - [DESDE_MAS])
+AND o.DTFECHAOPERACION < TRUNC(SYSDATE - [HASTA])
+order by o.DTFECHAOPERACION desc
+;
 

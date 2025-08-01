@@ -76,8 +76,8 @@ case when slongitud=''0'' then ''-89.62573''
 else replace(slongitud,''+'',''-'') end "LONGITUD"
 
 FROM SINCRONIZADOR.viewtransacciones vt where 
-DTFECHACREACION >= TRUNC(SYSDATE - 1)
-AND DTFECHACREACION < TRUNC(SYSDATE) 
+DTFECHACREACION >= TRUNC(SYSDATE - [DESDE_MAS])
+AND DTFECHACREACION < TRUNC(SYSDATE - [HASTA]) 
 and tipotransaccion <> ''MIFARE DESFire''
 and dsaldo >= -12 and inumeromonedero is not null
 order by DTFECHAOPERACION asc

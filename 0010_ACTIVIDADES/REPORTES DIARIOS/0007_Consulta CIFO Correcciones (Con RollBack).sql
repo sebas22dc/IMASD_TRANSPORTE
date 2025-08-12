@@ -208,4 +208,4 @@ left join catalogos.estatus e on e.uidestatus = co.uidestatus
 where 1=1
 and co.snombregrupocomercial = ''Cajero'' and co.scomercio like ''CIFO%''
 and coop.ifoliocomercio in(select ifoliocomercio from canceladas)
-order by o.DTFECHAOPERACION desc 
+order by o.DTFECHAOPERACION desc

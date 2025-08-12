@@ -1,0 +1,51 @@
+-- 19559	5000000000100090						"Se observa que los datos registrados en el sistema de recaudo coinciden con la información proporcionada en la descripción del ticket.
+
+-- Información de la Plataforma Recaudo:
+-- Nombre: Alma Lucely Quintal Leal
+-- Teléfono: 9995487072
+-- Correo actual: quintallealalmalucely@gmail.com "	"Para solicitar que sea borrada mi cuenta anterior y desvinculada mi tarjeta con número 5000000000100090 de esa cuenta ya que no puedo entrar.
+
+-- Número de tarjeta: 5000000000100090
+
+-- Correo anterior: quintallealalmalucely@gmail.com
+
+-- Número telefónico anterior: 9995487072
+
+-- Nombre: Alma Lucely Quintal Leal"	Desvincular la tarjeta con número 5000000000100090 de la cuenta con correo: quintallealalmalucely@gmail.com y Telefono: 9995487072.	Proceso	Pedro		
+
+
+
+
+
+
+UPDATE APPMONEDEROQUERY.TARJETAUSUARIO SET BACTIVO = 0, BBAJA = 1
+--SELECT COUNT(0) FROM APPMONEDEROQUERY.TARJETAUSUARIO
+WHERE UIDTARJETA IN (
+SELECT t.UIDTARJETA
+FROM APPMONEDEROQUERY.TARJETAUSUARIO t
+INNER JOIN APPMONEDEROQUERY.ESTADODECUENTA e ON t.UIDMONEDERO = e.UIDMONEDERO
+INNER JOIN CREDENCIALIZACION.ESTATUSTARJETA et ON et.UIDESTATUSTARJETA = e.UIDESTATUSTARJETA
+INNER JOIN APPMONEDEROQUERY.USUARIO u ON t.UIDUSUARIO = u.UIDUSUARIO
+INNER JOIN APP.USUARIO usu ON u.UIDUSUARIO = usu.UIDUSUARIO
+WHERE 1=1
+AND t.BACTIVO = 1 AND t.snumerotarjeta = '5000000000100090'
+);
+commit;
+
+
+UPDATE APPMONEDEROCOMMAND.TARJETAUSUARIO SET BACTIVO = 0, BBAJA = 1
+--SELECT COUNT(0) FROM APPMONEDEROCOMMAND.TARJETAUSUARIO
+WHERE UIDTARJETA IN (
+SELECT am.UIDTARJETA
+FROM APPMONEDEROCOMMAND.TARJETAUSUARIO AM
+INNER JOIN APPMONEDEROCOMMAND.ESTADODECUENTA AE ON AE.UIDMONEDERO = AM.UIDMONEDERO
+INNER JOIN APPMONEDEROCOMMAND.USUARIO USU ON USU.UIDUSUARIO = AM.UIDUSUARIO
+INNER JOIN APP.USUARIO USU2 ON USU2.UIDUSUARIO = usu.UIDUSUARIO
+WHERE
+-- am.snumerotarjeta = 5000000000593414
+1=1
+AND AM.BACTIVO = 1
+AND am.snumerotarjeta = '5000000000100090' --and am.snumerotarjeta = 5000000000593414
+);
+commit;
+

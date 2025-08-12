@@ -27,8 +27,8 @@ select co.scomercio,o.sfolioventa
 from COMERCIOCONSULTAS.operaciones  o
 inner join comercio.comercios co on co.uidcomercio = o.uidcomercio
 left join catalogos.estatus e on e.uidestatus = co.uidestatus
-where o.DTFECHAOPERACION >= TO_DATE('26-06-2025 00:00:00', 'DD-MM-YYYY HH24:MI:SS')
-    AND o.DTFECHAOPERACION < TO_DATE('01-07-2025 00:00:00', 'DD-MM-YYYY HH24:MI:SS')
+where o.DTFECHAOPERACION >= TO_DATE('08-04-2025 00:00:00', 'DD-MM-YYYY HH24:MI:SS')
+    AND o.DTFECHAOPERACION < TO_DATE('09-04-2025 00:00:00', 'DD-MM-YYYY HH24:MI:SS')
 and co.snombregrupocomercial = 'Cajero' and co.scomercio like 'CIFO%' and o.sestatustransaccion = 'CANCELADA'
 )X ON x.scomercio = co.scomercio and x.sfolioventa = o.sfolioventa
     left join comercio.logventa lv on lv.ifolioventa=o.sfolioventa
@@ -37,8 +37,8 @@ and co.snombregrupocomercial = 'Cajero' and co.scomercio like 'CIFO%' and o.sest
 	left join comercio.logventadetalle lvd3 on lvd3.uidlogventa=lv.uidlogventa and lvd3.sestatus='OPERACIÓN DETALLE GUARDADA'
 	left join comercio.logventadetalle lvd4 on lvd4.uidlogventa=lv.uidlogventa and lvd4.sestatus='CONFIRMACIÓN DE SALDO PROTEGIDO'
 	left join comercio.logventadetalle lvd5 on lvd5.uidlogventa=lv.uidlogventa and lvd5.sestatus='EXITOSA'
-where o.DTFECHAOPERACION >= TO_DATE('14-06-2025 00:00:00', 'DD-MM-YYYY HH24:MI:SS')
-    AND o.DTFECHAOPERACION < TO_DATE('15-07-2025 00:00:00', 'DD-MM-YYYY HH24:MI:SS')
+where o.DTFECHAOPERACION >= TO_DATE('08-04-2025 00:00:00', 'DD-MM-YYYY HH24:MI:SS')
+    AND o.DTFECHAOPERACION < TO_DATE('09-04-2025 00:00:00', 'DD-MM-YYYY HH24:MI:SS')
 and co.snombregrupocomercial = 'Cajero' and co.scomercio like 'CIFO%' and o.sestatustransaccion = 'CONFIRMADA'
 and x.sfolioventa is null
 order by o.DTFECHAOPERACION desc
@@ -50,7 +50,7 @@ order by o.DTFECHAOPERACION desc
 --------------------------SEBAS
 --CONSULTA MONITOR OPERACIONES COMERCIO NOMBRE DEL ARCHIVO: COMERCIOS_CIFO_DDMMYY
 --- ESTO ES A OTRO FTP
-select soperacion as "OPERACIÓN", co.inumcomercio "CLIENTE", co.scomercio "COMERCIO" , o.sfolioventa "FOLIO", coop.ifoliocomercio "FOLIOCOMERCIO",TO_CHAR(trunc(o.dtfechaoperacion) , 'dd/MM/yyyy HH24:MI:SS') "FECHA",
+select soperacion as "OPERACIÓN", co.inumcomercio "CLIENTE", co.scomercio "COMERCIO" , o.sfolioventa "FOLIO", coop.ifoliocomercio "FOLIOCOMERCIO",TO_CHAR(trunc(o.dtfechaoperacion) , ''dd/MM/yyyy HH24:MI:SS'') "FECHA",
 to_char(o.dtfechaoperacion, ''HH24:MI'') "HORA", to_char(o.dtfechaoperacion,''DD/MM/YYYY HH24:MI:SS'') FECHAHORA,
     lvd1.smensajesalidaapi "OPERACIÓN GUARDADA SALIDA API",
     lvd1.dtfecha "OPERACIÓN GUARDADA FECHA",
@@ -90,7 +90,6 @@ where o.DTFECHAOPERACION >= TRUNC(SYSDATE - [DESDE_MAS])
 and co.snombregrupocomercial = ''Cajero'' and co.scomercio like ''CIFO%'' and o.sestatustransaccion = ''CONFIRMADA''
 and x.sfolioventa is null
 order by o.DTFECHAOPERACION desc
-
 ;
 
 

@@ -150,6 +150,26 @@ select * from PREP_MONEDEROCOMANDOS.MOVIMIENTOSESTADOSDECUENTA where uidtipooper
 -- --------------------------------------------------------------
 -- update prep_pagos.estadodecuenta set DSALDO = DSALDO-23
 -- where uidmonedero = (select uidmonedero from prep_credencializacion.tarjetas where  inumeromonedero = '1000000000981115');
+
+
+--  update appmonederocommand.estadodecuenta set DSALDO = DSALDO-100
+--  where uidmonedero = (select uidmonedero from credencializacion.tarjetas where  inumeromonedero = '1000000000156031');
+--  ----------------------------------------
+--  update monederoconsultas.estadodecuenta set DSALDO = DSALDO-100
+--  where uidmonedero = (select uidmonedero from credencializacion.tarjetas where  inumeromonedero = '1000000000156031');
+--  ------------------------------------------------------
+--  update appmonederoquery.estadodecuenta set DSALDO = DSALDO-100
+--  where uidmonedero = (select uidmonedero from credencializacion.tarjetas where  inumeromonedero = '1000000000156031');
+--  --------------------------------------------------------------
+--  update pagos.estadodecuenta set DSALDO = DSALDO-100
+--  where uidmonedero = (select uidmonedero from credencializacion.tarjetas where  inumeromonedero = '1000000000156031');
+--  -----------------------------------------------------------------
+--   update apptickets.estadodecuenta set DSALDO = DSALDO-100
+--  where uidmonedero = (select uidmonedero from credencializacion.tarjetas where  inumeromonedero = '1000000000156031');
+
+
+
+
 -- --#reversiones end
 select * from PREP_temp_registros_ajustar;
 

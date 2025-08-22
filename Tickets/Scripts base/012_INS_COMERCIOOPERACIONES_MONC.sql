@@ -1,3 +1,5 @@
+
+
 INSERT INTO MONEDEROCOMANDOS.MOVIMIENTOSESTADOSDECUENTA 
 (uidmovimientoestadodecuenta,uidoperacion,uidtiposmonedero,uidtipomovimiento,uidtipotransaccion,dmonto,sobservaciones,uidestatus,dtfechaoperacion,dtfechacreacion,dtfechamodificacion,dtfechabaja,bactivo,bbaja,uidusuariocreacion,uidusuariomodificacion,
 uidusuariobaja,uidmonedero,ifoliomovimiento,semisor,bfacturado,brecargado,bcancelado,uidtipooperacion)

@@ -10,12 +10,24 @@
 --ALTER TABLESPACE TEMP SHRINK TEMPFILE '/oradata/TRANSPORTE/temp01.dbf' KEEP 5000M;  --> intenta reducir el tamaño del tablespace temporal,
 --SELECT tablespace_name,  SUM(bytes_used)/1024/1024 AS used_MB,  SUM(bytes_free)/1024/1024 AS free_MB FROM v$temp_space_header GROUP BY tablespace_name;
 
---ALTER DATABASE DATAFILE '/oradata2/transporte/DATA01.dbf' AUTOEXTEND ON NEXT 100M MAXSIZE 17G;--> aumentar el tamaño de la base de datos
+--ALTER DATABASE DATAFILE '/oradata2/transporte/DATA01.dbf' AUTOEXTEND ON NEXT 100M MAXSIZE 20G;--> aumentar el tamaño de la base de datos
 
 SELECT tablespace_name, file_name, bytes/1024/1024 AS MB, autoextensible FROM dba_data_files WHERE tablespace_name = 'DATA';
 
+SELECT tablespace_name, file_name, bytes/1024/1024 AS MB, autoextensible FROM dba_data_files WHERE tablespace_name = 'DATA';
 
+SELECT tablespace_name,  SUM(bytes_used)/1024/1024 AS used_MB,  SUM(bytes_free)/1024/1024 AS free_MB FROM dba_data_files WHERE tablespace_name = 'DATA';
 -- /oradata/app/oracle/diag/rdbms/transporte/TRANSPORTE/trace
+
+SELECT
+    tablespace_name,
+    ROUND(used_space*8/1024, 2) AS used_mb,
+    ROUND(tablespace_size*8/1024, 2) AS total_mb,
+    ROUND((tablespace_size - used_space)*8/1024, 2) AS free_mb,
+    ROUND((used_space/tablespace_size)*100, 2) AS pct_used
+FROM dba_tablespace_usage_metrics
+WHERE tablespace_name = 'DATA';
+
 
 
 -- CREATE USER usr_dba_dev IDENTIFIED BY "VG4Bf5r1";

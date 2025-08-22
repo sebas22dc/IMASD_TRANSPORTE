@@ -18,6 +18,27 @@ WHERE uidComercio NOT IN (
 
 
 
+SELECT *
+FROM Prep_Catalogos.Paquetes,Prep_Catalogos.Productos
+WHERE Paquetes.uidProducto=Productos.uidProducto
+AND Paquetes.uidPaquete NOT IN (
+    SELECT Paquetes.uidPaquete
+    FROM Prep_Comercio.Paquetes
+)
+AND Paquetes.bActivo=1
+AND Paquetes.bBaja=0
+AND Productos.bApp=0;
+
+/*Productos*/
+SELECT *
+FROM Prep_Catalogos.Productos
+WHERE uidProducto NOT IN (
+    SELECT uidProducto
+    FROM Prep_Comercio.Productos    
+)
+AND bActivo=1
+AND bBaja=0
+AND bApp=0;
 
 
 
@@ -75,6 +96,23 @@ WHERE uidConfiguracionProducto NOT IN (
     SELECT uidConfiguracionProducto
     FROM Prep_Comercio.ConfiguracionProductos
 );
+
+
+---COMERCIO ORQUESTADOR UIDESTATUSTARJETA DISPARADOR DE CREDENCIALIZAICION
+  select t2.UIDestatusTarjeta,t1.UIDESTATUSTARJETA,t1.dtfechamodificacion,t1.inumerotarjeta
+  from prep_credencializacion.tarjetas t1 
+  left join prep_COMERCIO.monederostarjetas t2 on t1.inumerotarjeta  =t2.inumtarjeta 
+  where  t2.UIDestatusTarjeta is null  or t2.UIDESTATUSTARJETA <> t1.UIDESTATUSTARJETA  
+  order by t1.dtfechamodificacion desc
+
+
+
+
+
+
+
+
+
 
 
 //////////////////////////////////////////////////////
@@ -200,9 +238,9 @@ FROM Prep_Catalogos.ConfiguracionProductos
 WHERE uidConfiguracionProducto NOT IN (
     SELECT uidConfiguracionProducto
     FROM Prep_Comercio.ConfiguracionProductos
-);
+)
 
-
+UNION ALL
 -----------------------------------
 
 ----Comercio Command
@@ -240,10 +278,10 @@ FROM Prep_Catalogos.ConfiguracionProductos
 WHERE uidConfiguracionProducto NOT IN (
     SELECT UIIDCOMERCIOPRODUCTOCOMISIONES
     FROM Prep_ComercioComandos.COMISIONESPRODUCTOREPLICA
-);
+)
 
 
-
+UNION ALL
 --------------Comercio CONSULTAS
 
 

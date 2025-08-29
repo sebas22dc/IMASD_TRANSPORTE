@@ -103,7 +103,7 @@ WHERE uidConfiguracionProducto NOT IN (
   from prep_credencializacion.tarjetas t1 
   left join prep_COMERCIO.monederostarjetas t2 on t1.inumerotarjeta  =t2.inumtarjeta 
   where  t2.UIDestatusTarjeta is null  or t2.UIDESTATUSTARJETA <> t1.UIDESTATUSTARJETA  
-  order by t1.dtfechamodificacion desc
+  order by t1.dtfechamodificacion desc;
 
 
 

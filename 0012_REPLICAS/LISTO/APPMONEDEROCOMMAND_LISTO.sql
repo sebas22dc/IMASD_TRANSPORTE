@@ -1,4 +1,9 @@
-************************************************
+
+
+
+
+
+
 
 -- CONSULTA PARA VALIDAR DIFERENCIAS
 -- MONEDEROS NO REPLICADOS EN PREP_APPMONEDEROCOMMAND

@@ -94,3 +94,66 @@ AND OL.DTFECHAOPERACION>=TRUNC(SYSDATE - [DESDE_MAS])
 AND OL.DTFECHAOPERACION< TRUNC(SYSDATE - [HASTA])
     order by dtfechaoperacion desc
     ;
+
+
+
+
+
+
+
+
+
+
+    --VERSION 2.0 SEBASTIAN
+
+
+
+    WITH AUTOBUS AS (SELECT AR.UIDAUTOBUS,
+                        AR.UIDCHOFER,
+                        h.UIDHORARIO,
+                        h.SHORARIO,
+                        h.SHORAINICIO,
+                        h.SHORAFINAL,
+                        ROW_NUMBER() OVER (ORDER BY trunc(AR.DTFECHACREACION) DESC) idrow
+                 FROM SINCRONIZADOR.AUTOBUSRUTACHOFER AR
+                          left JOIN CATALOGOS.HORARIOS h ON h.UIDHORARIO = AR.UIDHORARIO
+                 WHERE AR.BACTIVO = 1
+                   and h.bactivo = 1)
+
+SELECT 'OPEN LOOP'                                                                    TIPO_MONEDERO
+     , 'EMV'                                                                          TIPO_TRANSACCION
+     , TO_CHAR(OL.DTFECHAOPERACION, 'DD/MM/YYYY HH24:MM:SS')                          FECHA_OPERACION
+     , NVL(AUT.SNUMECO, '000')                                                        NUMERO_ECONOMICO
+     , VS.SVALIDADOR                                                                  VALIDADOR
+     , R.SCLAVERUTA                                                                   CLAVE_RUTA
+     , R.SRUTA                                                                        RUTA
+     , A.SHORARIO                                                                     HORARIO
+     , CASE WHEN OL.SLATITUD = '-22.8328869' THEN '+20.98155' ELSE OL.SLATITUD END    LATITUD
+     , CASE WHEN OL.SLONGITUD = '-47.07695782' THEN '-89.62573' ELSE OL.SLONGITUD END LONGITUD
+     , C.SMONEDA                                                                      MONEDA
+     , 'EMV-BANCARIA'                                                                 TIPO_TARIFA
+     , C.DTARIFAMONTO                                                                 MONTO
+     , OC.SEMVCARDBRAND                                                               TIPOTARJETA
+     , OC.SEMVCARDBIN                                                                 FIRST6D
+     , OC.SEMVCARDLAST                                                                LAST4D
+from openloop.transacciones OL
+         INNER JOIN SINCRONIZADOR.VSAM V ON V.SCSN = OL.IDVALIDADOR AND V.BACTIVO = 1
+         INNER JOIN SINCRONIZADOR.VALIDADORVSAM VV ON VV.UIDVSAM = V.UIDVSAM AND VV.BACTIVO = 1
+         INNER JOIN SINCRONIZADOR.VALIDADORES VS ON VS.UIDVALIDADOR = VV.UIDVALIDADOR AND VS.BACTIVO = 1
+         INNER JOIN SINCRONIZADOR.AUTOBUSVALIDADOR AV ON AV.UIDVALIDADOR = VS.UIDVALIDADOR AND AV.BACTIVO = 1
+         INNER JOIN SINCRONIZADOR.AUTOBUSES AUT ON AUT.UIDAUTOBUS = AV.UIDAUTOBUS AND AUT.BACTIVO = 1
+         INNER JOIN OPENLOOP.RUTAS R ON R.SCLAVERUTA = OL.SIDRUTA
+         INNER JOIN OPENLOOP.CARGOS C ON OL.UIDTRANSACCION = C.UIDTRANSACCION
+         INNER JOIN AUTOBUS A ON A.UIDAUTOBUS = AUT.UIDAUTOBUS
+         LEFT JOIN CATALOGOS.MARCASAUTOBUSES M ON M.UIDMARCAAUTOBUS = AUT.UIDMARCA
+         LEFT JOIN CATALOGOS.MODELOSAUTOBUSES M2 ON M2.UIDMODELOAUTOBUS = AUT.UIDMODELO
+         LEFT JOIN CATALOGOS.TIPOSAUTOBUSES T ON t.UIDTIPOAUTOBUS = AUT.STIPO
+         LEFT JOIN CATALOGOS.CHOFERES CH ON CH.UIDCHOFER = A.UIDCHOFER
+         LEFT JOIN SINCRONIZADOR.CONCESIONARIOS C2 ON C2.UIDCONCESIONARIO = AUT.UIDCONCESIONARIO
+    ----
+         LEFT JOIN openloop.CONCILIACIONES OC on OC.STOKENTRANSACTION = OL.STOKENTRANSACTION
+--------------------
+WHERE OL.SESTADOOPERACION IN ('PENDIENTE', 'LIQUIDADO')
+  AND OL.DTFECHAOPERACION >= TRUNC(SYSDATE - 1)
+  AND OL.DTFECHAOPERACION < TRUNC(SYSDATE)
+order by dtfechaoperacion desc;

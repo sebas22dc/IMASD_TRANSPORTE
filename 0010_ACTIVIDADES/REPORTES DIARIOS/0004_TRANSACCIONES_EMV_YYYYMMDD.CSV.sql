@@ -107,8 +107,7 @@ AND OL.DTFECHAOPERACION< TRUNC(SYSDATE - [HASTA])
     --VERSION 2.0 SEBASTIAN
 
 
-
-    WITH AUTOBUS AS (SELECT AR.UIDAUTOBUS,
+WITH AUTOBUS AS (SELECT AR.UIDAUTOBUS,
                         AR.UIDCHOFER,
                         h.UIDHORARIO,
                         h.SHORARIO,
@@ -120,22 +119,29 @@ AND OL.DTFECHAOPERACION< TRUNC(SYSDATE - [HASTA])
                  WHERE AR.BACTIVO = 1
                    and h.bactivo = 1)
 
-SELECT 'OPEN LOOP'                                                                    TIPO_MONEDERO
-     , 'EMV'                                                                          TIPO_TRANSACCION
-     , TO_CHAR(OL.DTFECHAOPERACION, 'DD/MM/YYYY HH24:MM:SS')                          FECHA_OPERACION
-     , NVL(AUT.SNUMECO, '000')                                                        NUMERO_ECONOMICO
+SELECT ''OPEN LOOP''                                                                    TIPO_MONEDERO
+     , ''EMV''                                                                          TIPO_TRANSACCION
+     , TO_CHAR(OL.DTFECHAOPERACION, ''DD/MM/YYYY HH24:MM:SS'')                          FECHA_OPERACION
+     , NVL(AUT.SNUMECO, ''000'')                                                        NUMERO_ECONOMICO
      , VS.SVALIDADOR                                                                  VALIDADOR
      , R.SCLAVERUTA                                                                   CLAVE_RUTA
      , R.SRUTA                                                                        RUTA
      , A.SHORARIO                                                                     HORARIO
-     , CASE WHEN OL.SLATITUD = '-22.8328869' THEN '+20.98155' ELSE OL.SLATITUD END    LATITUD
-     , CASE WHEN OL.SLONGITUD = '-47.07695782' THEN '-89.62573' ELSE OL.SLONGITUD END LONGITUD
+     , CASE WHEN OL.SLATITUD = ''-22.8328869'' THEN ''+20.98155'' ELSE OL.SLATITUD END    LATITUD
+     , CASE WHEN OL.SLONGITUD = ''-47.07695782'' THEN ''-89.62573'' ELSE OL.SLONGITUD END LONGITUD
      , C.SMONEDA                                                                      MONEDA
-     , 'EMV-BANCARIA'                                                                 TIPO_TARIFA
+     , ''EMV-BANCARIA''                                                                 TIPO_TARIFA
      , C.DTARIFAMONTO                                                                 MONTO
      , OC.SEMVCARDBRAND                                                               TIPOTARJETA
      , OC.SEMVCARDBIN                                                                 FIRST6D
      , OC.SEMVCARDLAST                                                                LAST4D
+     , case
+           when oc.SEMVCARDBRAND = ''amex'' then
+               RPAD(nvl(oc.SEMVCARDBIN, ''000000''), 11, ''X'') || nvl(oc.SEMVCARDLAST, ''0000'')
+           else
+               RPAD(nvl(oc.SEMVCARDBIN, ''000000''), 12, ''X'') || nvl(oc.SEMVCARDLAST, ''0000'')
+    end
+                                                                                      NUMCARD
 from openloop.transacciones OL
          INNER JOIN SINCRONIZADOR.VSAM V ON V.SCSN = OL.IDVALIDADOR AND V.BACTIVO = 1
          INNER JOIN SINCRONIZADOR.VALIDADORVSAM VV ON VV.UIDVSAM = V.UIDVSAM AND VV.BACTIVO = 1
@@ -153,7 +159,7 @@ from openloop.transacciones OL
     ----
          LEFT JOIN openloop.CONCILIACIONES OC on OC.STOKENTRANSACTION = OL.STOKENTRANSACTION
 --------------------
-WHERE OL.SESTADOOPERACION IN ('PENDIENTE', 'LIQUIDADO')
-  AND OL.DTFECHAOPERACION >= TRUNC(SYSDATE - 1)
-  AND OL.DTFECHAOPERACION < TRUNC(SYSDATE)
+WHERE OL.SESTADOOPERACION IN (''PENDIENTE'', ''LIQUIDADO'')
+  AND OL.DTFECHAOPERACION >= TRUNC(SYSDATE - [DESDE_MAS])
+  AND OL.DTFECHAOPERACION < TRUNC(SYSDATE - [HASTA])
 order by dtfechaoperacion desc;

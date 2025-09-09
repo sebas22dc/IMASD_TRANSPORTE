@@ -5,6 +5,8 @@ CREATE TABLE dbo.Reportes_Configuraciones_Mensuales (
 	Sql_query nvarchar(MAX)
 );
 
+ALTER TABLE dbo.Reportes_Configuraciones_Mensuales
+ADD bActivo BIT NOT NULL DEFAULT (1);
 -- CONSULTAS X REPORTE
 ---------------------------
 

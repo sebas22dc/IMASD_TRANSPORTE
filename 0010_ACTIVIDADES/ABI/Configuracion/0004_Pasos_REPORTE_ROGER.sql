@@ -53,3 +53,33 @@ INNER JOIN (
     ON t.Dia_Operacion = b.Dia_Operacion
 WHERE b.Estado_Transaccion <> 'TOTAL_GENERAL';
 GO
+
+
+------------------------------------------------------------ tabla de datos de rechazadas tarjetas registros 
+
+
+    CREATE TABLE dbo.Tarjetas_Rechazo (
+    Num_economico varchar(30) not null ,
+    Clave_validador varchar(30) not null ,
+    Num_tarjeta varchar(20) not null ,
+    Dia_Operacion date not null ,
+    Hora_Operacion time(0) not null ,
+    Tipo_tarifa varchar(50) not null,
+        CONSTRAINT UQ_Tarjetas_Rechazo UNIQUE (
+        Num_tarjeta,
+        Dia_Operacion
+        )
+    );
+
+    -- Tipo tabla para recibir filas desde C# (TVP)
+CREATE TYPE dbo.TarjetasRechazoRows AS TABLE(
+    Num_economico varchar(30) not null ,
+    Clave_validador varchar(30) not null ,
+    Num_tarjeta varchar(20) not null ,
+    Dia_Operacion date not null ,
+    Hora_Operacion time(0) not null ,
+    Tipo_tarifa varchar(50) not null
+);
+
+
+--------

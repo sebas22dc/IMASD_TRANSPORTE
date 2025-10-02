@@ -1,0 +1,7 @@
+ALTER TABLE TARIFAS.RUTAS
+ADD BTRANSITORIO NUMBER(1,0) DEFAULT 0 NOT NULL;
+
+
+COMMENT ON COLUMN TARIFAS.RUTAS.BTRANSITORIO IS 'Indica si la ruta es transitoria (1) o definitiva (0). Sirve para identificar si la ruta corresponde a un autobús o no';
+
+UPDATE TARIFAS.RUTAS SET BTRANSITORIO=0 WHERE SCLAVERUTA = 524;

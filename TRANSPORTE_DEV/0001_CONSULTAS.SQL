@@ -178,5 +178,299 @@ WHERE t1.BACTIVO = 1 AND t1.BBAJA = 0 AND t2.UIDTIPOTARIFA IS NULL;
 commit;
 
 
+SELECT COUNT(0)
+FROM PRPE_APPMONEDEROCOMMAND.ESTADODECUENTA t1
+INNER JOIN PREP_APPMONEDEROQUERY.ESTADODECUENTA t2 ON t1.UIDMONEDERO = t2.UIDMONEDERO
+WHERE t1.UIDTIPOTARIFA <> t2.UIDTIPOTARIFA OR t1.ITIPOTARJETA <> t2.ITIPOTARJETA;
 
 
+MERGE INTO PREP_APPMONEDEROQUERY.ESTADODECUENTA dest
+USING (
+    SELECT T1.UIDMONEDERO, T1.UIDTIPOTARIFA, T1.ITIPOTARJETA
+        FROM PREP_APPMONEDEROCOMMAND.ESTADODECUENTA t1
+		INNER JOIN PREP_APPMONEDEROQUERY.ESTADODECUENTA t2 ON t1.UIDMONEDERO = t2.UIDMONEDERO
+	WHERE t1.UIDTIPOTARIFA <> t2.UIDTIPOTARIFA OR t1.ITIPOTARJETA <> t2.ITIPOTARJETA
+) src
+ON (dest.UIDMONEDERO = src.UIDMONEDERO)
+WHEN MATCHED THEN
+    UPDATE SET dest.UIDTIPOTARIFA = src.UIDTIPOTARIFA,
+     dest.ITIPOTARJETA = src.ITIPOTARJETA 
+
+
+commit;
+
+
+
+
+
+
+
+
+-- DIFERENCIAS SIDAPLICACION USUARIOS
+SELECT 'APPMONEDERO COMMAND' REFERENCIA, COUNT(0) DIFERENCIA FROM APP.USUARIO T1
+INNER JOIN APPMONEDEROCOMMAND.USUARIO T2 ON T1.UIDUSUARIO = T2.UIDUSUARIO
+WHERE T1.SIDAPLICACION <> T2.SIDAPLICACION
+UNION ALL
+SELECT 'APPMONEDERO QUERY' REFERENCIA, COUNT(0) DIFERENCIA FROM APP.USUARIO T1
+INNER JOIN APPMONEDEROQUERY.USUARIO T2 ON T1.UIDUSUARIO = T2.UIDUSUARIO
+WHERE T1.SIDAPLICACION <> T2.SIDAPLICACION
+UNION ALL
+SELECT 'APPTICKETS' REFERENCIA, COUNT(0) DIFERENCIA FROM APP.USUARIO T1
+INNER JOIN APPTICKETS.USUARIO T2 ON T1.UIDUSUARIO = T2.UIDUSUARIO
+WHERE T1.SIDAPLICACION <> T2.SIDAPLICACION
+UNION ALL
+SELECT 'NOTIFICACIONES' REFERENCIA, COUNT(0) DIFERENCIA FROM APP.USUARIO T1
+INNER JOIN NOTIFICACIONES.USUARIO T2 ON T1.UIDUSUARIO = T2.UIDUSUARIO
+WHERE T1.SIDAPLICACION <> T2.SIDAPLICACION
+
+
+
+
+-- ACTUALIZAR SIDAPLICACION APPMONEDEROCOMMAND
+MERGE INTO APPMONEDEROCOMMAND.USUARIO dest
+USING (
+    SELECT T1.UIDUSUARIO, T1.SIDAPLICACION
+        FROM APP.USUARIO T1
+		INNER JOIN APPMONEDEROCOMMAND.USUARIO T2 ON T1.UIDUSUARIO = T2.UIDUSUARIO
+	WHERE T1.SIDAPLICACION <> T2.SIDAPLICACION
+) src
+ON (dest.UIDUSUARIO = src.UIDUSUARIO)
+WHEN MATCHED THEN
+    UPDATE SET dest.SIDAPLICACION = src.SIDAPLICACION
+commit;
+
+-- ACTUALIZAR SIDAPLICACION APPMONEDEROQUERY
+MERGE INTO APPMONEDEROQUERY.USUARIO dest
+USING (
+    SELECT T1.UIDUSUARIO, T1.SIDAPLICACION
+        FROM APP.USUARIO T1
+		INNER JOIN APPMONEDEROQUERY.USUARIO T2 ON T1.UIDUSUARIO = T2.UIDUSUARIO
+	WHERE T1.SIDAPLICACION <> T2.SIDAPLICACION
+) src
+ON (dest.UIDUSUARIO = src.UIDUSUARIO)
+WHEN MATCHED THEN
+    UPDATE SET dest.SIDAPLICACION = src.SIDAPLICACION
+commit;
+
+-- ACTUALIZAR SIDAPLICACION APPTICKETS
+MERGE INTO APPTICKETS.USUARIO dest
+USING (
+    SELECT T1.UIDUSUARIO, T1.SIDAPLICACION
+        FROM APP.USUARIO T1
+		INNER JOIN APPTICKETS.USUARIO T2 ON T1.UIDUSUARIO = T2.UIDUSUARIO
+	WHERE T1.SIDAPLICACION <> T2.SIDAPLICACION
+) src
+ON (dest.UIDUSUARIO = src.UIDUSUARIO)
+WHEN MATCHED THEN
+    UPDATE SET dest.SIDAPLICACION = src.SIDAPLICACION
+commit;
+
+-- ACTUALIZAR SIDAPLICACION NOTIFICACIONES
+MERGE INTO NOTIFICACIONES.USUARIO dest
+USING (
+    SELECT T1.UIDUSUARIO, T1.SIDAPLICACION
+        FROM APP.USUARIO T1
+		INNER JOIN NOTIFICACIONES.USUARIO T2 ON T1.UIDUSUARIO = T2.UIDUSUARIO
+	WHERE T1.SIDAPLICACION <> T2.SIDAPLICACION
+) src
+ON (dest.UIDUSUARIO = src.UIDUSUARIO)
+WHEN MATCHED THEN
+    UPDATE SET dest.SIDAPLICACION = src.SIDAPLICACION
+
+commit;
+
+
+
+
+
+
+
+select * from MONEDEROCOMANDOS.MONEDERO
+    ;
+select * from APPMONEDEROQUERY.ESTADODECUENTA
+
+
+;
+   SELECT MM.uidmonedero,
+      MM.UIDTIPOSMONEDERO,
+      AMM.uidmonedero,
+            AMM.uidtipomonedero
+   FROM
+      MONEDEROCOMANDOS.MONEDERO MM
+   left join APPMONEDEROQUERY.ESTADODECUENTA AMM on MM.UIDMONEDERO = AMM.UIDMONEDERO
+   where
+   MM.BACTIVO = 1 and MM.BBAJA = 0  
+   AND (AMM.UIDTIPOMONEDERO is null or MM.UIDTIPOSMONEDERO <> AMM.UIDTIPOMONEDERO)
+   and AMM.uidmonedero is not null
+
+
+
+
+MERGE INTO APPMONEDEROQUERY.ESTADODECUENTA e USING (
+   SELECT
+      MM.uidmonedero,
+      MM.UIDTIPOSMONEDERO
+   FROM
+      MONEDEROCOMANDOS.MONEDERO MM
+   left join APPMONEDEROQUERY.ESTADODECUENTA AMM on MM.UIDMONEDERO = AMM.UIDMONEDERO
+   where AMM.UIDTIPOMONEDERO is null or MM.UIDTIPOSMONEDERO <> AMM.UIDTIPOMONEDERO
+      --   where bInsertadoMovimientos= 1 and bInsertadoEstado = 1
+) datos ON (e.uidmonedero = datos.uidmonedero) WHEN MATCHED THEN
+UPDATE
+SET
+   e.UIDTIPOMONEDERO =  datos.UIDTIPOSMONEDERO;
+-- Confirmar la transacción completa
+COMMIT;
+
+
+
+
+
+select UIDESTATUS,
+       case
+           when UIDESTATUS = 'e49098ec-93d6-4a62-a40c-61f73d53b383' then 'EstatusBloq'
+           when UIDESTATUS = '5e879806-6e1d-4d5b-9610-25f2a681b637' then 'EstatusActv'
+           when UIDESTATUS = '0760fd5f-4039-4c7c-b915-4f0a9c4d4bdc' then 'EstatusBaja'
+           else 'otro'
+           end   estatus,
+       count(1),
+       'DEV' as ambiente
+from app.ESTADODECUENTA
+group by UIDESTATUS,
+         case
+             when UIDESTATUS = 'e49098ec-93d6-4a62-a40c-61f73d53b383' then 'EstatusBloq'
+             when UIDESTATUS = '5e879806-6e1d-4d5b-9610-25f2a681b637' then 'EstatusActv'
+             when UIDESTATUS = '0760fd5f-4039-4c7c-b915-4f0a9c4d4bdc' then 'EstatusBaja'
+             else 'otro'
+             end
+
+
+
+
+MERGE INTO estatusmonedero.motivo r
+USING (
+    SELECT uidMotivo,
+           sMotivo,
+           bPermitirOperaciones,
+           bPermitirReactivar
+     FROM catalogos.motivos
+     WHERE iModulo IN (500, 200)
+       AND bActivo = 1
+       AND bBaja = 0
+) p
+   ON (r.uidMotivo = p.uidMotivo)
+WHEN NOT MATCHED THEN
+   INSERT (uidMotivo, sNombre, bPermitirOperaciones, bPermitirReactivar)
+   VALUES (p.uidMotivo, p.sMotivo, p.bPermitirOperaciones, p.bPermitirReactivar);
+
+
+commit;
+
+
+
+
+---------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+select t1.UIDOPERACION                       as uidTraspaso,
+                          t1.DMONTO                             as traspasoMonto,
+                          t2.UIDOPERACION                       as origenUId,
+                          t2.DSALDOACTUAL                       as origenSaldoDespues,
+                          t2.DSALDOANTERIOR                     as origenSaldoAntes,
+                          (t2.DSALDOANTERIOR - t2.DSALDOACTUAL) as OrigenSaldoMovido,
+                          X.UIDOPERACION                        as destinoUID,
+                          X.DSALDOACTUAL                        as destinoSaldoDespues,
+                          X.DSALDOANTERIOR                      as destinoSaldoAntes,
+                          (X.DSALDOACTUAL - X.DSALDOANTERIOR)   as DestinoSaldoMovido,
+                          case
+                              when t1.DMONTO = (t2.DSALDOANTERIOR - t2.DSALDOACTUAL) THEN 1
+                              ELSE 0 END                        AS bOrigenDebitado,
+                          case
+                              when t1.DMONTO = (X.DSALDOACTUAL - X.DSALDOANTERIOR) THEN 1
+                              ELSE 0 END                        AS bDestinoAbonado
+                   from APPMONEDEROCOMMAND.TRASPASOS T1
+                            LEFT JOIN MONEDEROCONSULTAS.MOVIMIENTOS T2
+                                      ON T2.UIDOPERACION = T1.UIDOPERACION and t2.INUMMONEDERO = t1.INUMEROTARJETAORIGEN
+                            LEFT JOIN (select MMM.UIDOPERACION, MME.INUMTARJETA, MMM.DSALDOACTUAL, MMM.DSALDOANTERIOR
+                                       from MONEDEROCONSULTAS.MOVIMIENTOS MMM
+                                                join monederoconsultas.ESTADODECUENTA MME
+                                                     on MMM.INUMMONEDERO = MME.INUMMONEDERO) X
+                                      on X.UIDOPERACION = t1.UIDOPERACION AND X.INUMTARJETA = t1.INUMEROTARJETADESTINO
+
+
+
+
+select * from APPMONEDEROCOMMAND.TRASPASOS
+
+
+
+
+with baseDatos as (select t1.UIDOPERACION                       as uidTraspaso,
+                          t1.DMONTO                             as traspasoMonto,
+                          t2.UIDOPERACION                       as origenUId,
+                          t2.DSALDOACTUAL                       as origenSaldoDespues,
+                          t2.DSALDOANTERIOR                     as origenSaldoAntes,
+                          (t2.DSALDOANTERIOR - t2.DSALDOACTUAL) as OrigenSaldoMovido,
+                          X.UIDOPERACION                        as destinoUID,
+                          X.DSALDOACTUAL                        as destinoSaldoDespues,
+                          X.DSALDOANTERIOR                      as destinoSaldoAntes,
+                          (X.DSALDOACTUAL - X.DSALDOANTERIOR)   as DestinoSaldoMovido,
+                          case
+                              when t1.DMONTO = (t2.DSALDOANTERIOR - t2.DSALDOACTUAL) THEN 1
+                              ELSE 0 END                        AS bOrigenDebitado,
+                          case
+                              when t1.DMONTO = (X.DSALDOACTUAL - X.DSALDOANTERIOR) THEN 1
+                              ELSE 0 END                        AS bDestinoAbonado
+                   from APPMONEDEROCOMMAND.TRASPASOS T1
+                            LEFT JOIN MONEDEROCONSULTAS.MOVIMIENTOS T2
+                                      ON T2.UIDOPERACION = T1.UIDOPERACION and t2.INUMMONEDERO = t1.INUMEROTARJETAORIGEN
+                            LEFT JOIN (select MMM.UIDOPERACION, MME.INUMTARJETA, MMM.DSALDOACTUAL, MMM.DSALDOANTERIOR
+                                       from MONEDEROCONSULTAS.MOVIMIENTOS MMM
+                                                join monederoconsultas.ESTADODECUENTA MME
+                                                     on MMM.INUMMONEDERO = MME.INUMMONEDERO) X
+                                      on X.UIDOPERACION = t1.UIDOPERACION AND X.INUMTARJETA = t1.INUMEROTARJETADESTINO)
+select *
+from baseDatos
+where bOrigenDebitado = 0
+   or bDestinoAbonado = 0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------------
+
+
+
+conn SEGURIDAD/SEGURIDAD$

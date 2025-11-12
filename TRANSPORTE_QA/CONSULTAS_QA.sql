@@ -114,3 +114,34 @@ SELECT username, account_status, created, profile FROM dba_users WHERE username 
 --   BASETARIFAGRAL de la tabla prep_app.parametros, 
 --   pero igual respaldarlos para volverlos a colocar en la tabla una vez que finalice la prueba?
 --    E igual, simular una intermitencia en la BD
+
+
+
+MERGE INTO PREP_APPMONEDEROQUERY.ESTADODECUENTA dest
+USING (
+    SELECT T1.UIDMONEDERO, T1.UIDTIPOTARIFA, T1.ITIPOTARJETA
+        FROM PREP_APPMONEDEROCOMMAND.ESTADODECUENTA t1
+		INNER JOIN PREP_APPMONEDEROQUERY.ESTADODECUENTA t2 ON t1.UIDMONEDERO = t2.UIDMONEDERO
+	WHERE t1.UIDTIPOTARIFA <> t2.UIDTIPOTARIFA OR t1.ITIPOTARJETA <> t2.ITIPOTARJETA
+) src
+ON (dest.UIDMONEDERO = src.UIDMONEDERO)
+WHEN MATCHED THEN
+    UPDATE SET dest.UIDTIPOTARIFA = src.UIDTIPOTARIFA, dest.ITIPOTARJETA = src.ITIPOTARJETA 
+    commit;
+
+
+
+
+
+
+
+ALTER TABLE SEGURIDAD.USUARIOS ADD BUSUARIOAPI NUMBER(1,0) NULL;
+COMMENT ON COLUMN SEGURIDAD.USUARIOS.BUSUARIOAPI IS 'Campo para indicar que es un usuario para uso exclusivo de apis, no podran acceder al portal u otro sitio.';
+
+
+
+
+
+
+SELECT username, account_status, created, profile FROM dba_users WHERE username LIKE 'PREP_APPTICKETS'
+conn PREP_APPTICKETS/PREP_APPTICKETS$

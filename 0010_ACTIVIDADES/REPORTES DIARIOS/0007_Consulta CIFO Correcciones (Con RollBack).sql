@@ -167,6 +167,7 @@ order by o.DTFECHAOPERACION desc
 
 
 ;
+
 ------------------VERSION 2 SEBAS
 
 

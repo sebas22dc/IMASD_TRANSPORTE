@@ -30,7 +30,7 @@ DTFECHACREACION >= TO_DATE('06-07-2025 00:00:00', 'DD-MM-YYYY HH24:MI:SS') --LA 
 AND DTFECHACREACION < TO_DATE('07-07-2025 00:00:00', 'DD-MM-YYYY HH24:MI:SS') 
 and tipotransaccion <> 'MIFARE DESFire'
 and dsaldo >= -12 and inumeromonedero is not null
-order by DTFECHAOPERACION asc
+order by DTFECHAOPERACION asc;
 
 
 

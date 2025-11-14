@@ -1,0 +1,16 @@
+
+
+
+
+-- SQL
+USE STG_TRANSPORTE
+CREATE TABLE DBO.CONFIGURACIONES_CARGA_ATY (
+    [ID_CONFIGURACION] INT IDENTITY(1,1) NOT NULL, -- Identificador único de la configuración
+    [NOMBRE_PAQUETE] VARCHAR(100) NOT NULL,        -- Nombre del paquete SSIS o proceso ETL
+    [NOMBRE_ARCHIVO] VARCHAR(100) NOT NULL,        -- Archivo generado o procesado
+    [RUTA_CONSULTA_SQL] VARCHAR(100) NOT NULL,     -- Ruta del archivo SQL con la consulta fuente
+    [UBICACION_SFTP_DESTINO] VARCHAR(100) NOT NULL -- Ubicación SFTP de destino
+);
+
+INSERT INTO DBO.CONFIGURACIONES_CARGA_ATY (NOMBRE_PAQUETE, NOMBRE_ARCHIVO, RUTA_CONSULTA_SQL, UBICACION_SFTP_DESTINO) VALUES
+('CATALOGOS.COMERCIOS', 'comercios', 'C:\UTILS\REPORTES\CONSULTAS\ATY\CATALOGOS\comercios.sql', '/sftp/extraccion_recaudo')

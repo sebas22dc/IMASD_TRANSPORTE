@@ -1,0 +1,107 @@
+-- MONITOREO
+ SELECT /*Monitoreo conteo de errores del dia*/
+--      NFC.*
+    TRUNC(NFC.DTFECHAOPERACION) AS DTFECHAOPERACION,
+    TRUNC(NFC.DTFECHACREACION)     DTFECHACREACION,
+    CASE
+        WHEN NFC.IERROR = 0 THEN '0-Confirmada'
+        WHEN NFC.IERROR = 5 AND TOKENTRANSACCION != '00000000000000000000000000000000' THEN '5-Confirmada'
+        WHEN NFC.IERROR = 5 AND TOKENTRANSACCION = '00000000000000000000000000000000' THEN '5-Error en lectura'
+        WHEN NFC.IERROR = 1 THEN '1-Tarjeta expirada'
+        WHEN NFC.IERROR = 2 THEN '2-Sin saldo'
+        WHEN NFC.IERROR = 3 THEN '3-Deny list'--Tarjeta Bloqueada
+        WHEN NFC.IERROR = 4 THEN '4-Tarjeta no soportada'
+        WHEN NFC.IERROR = 6 THEN '6-Falta configurar tarifa'--Reportar con soporte
+        WHEN NFC.IERROR = 7 THEN '7-Error en recarga'
+        WHEN NFC.IERROR = 100 THEN '100-Tarjeta recargada'
+        ELSE 'Otro'
+        END                     AS ESTADOTRANSACCION,
+    COUNT(*)                    AS TOTAL_ERRORES
+FROM SINCRONIZADOR.DETALLESINCRONIZACIONTRANSACCIONESNFC NFC
+         INNER JOIN SINCRONIZADOR.MONEDERO M ON M.INUMEROTARJETA = NFC.INUMEROTARJETA AND M.INUMEROTARJETA > 0
+         inner join MONEDEROCONSULTAS.ESTADODECUENTA MCE on MCE.INUMTARJETA = M.INUMEROTARJETA
+         LEFT JOIN SINCRONIZADOR.VALIDADORES V ON V.UIDVALIDADOR = NFC.UIDVALIDADOR
+WHERE TRUNC(NFC.DTFECHAOPERACION) >= trunc(CURRENT_TIMESTAMP)
+  AND NFC.IERROR !=0
+  AND MCE.SESTATUS = 'ACTIVO'
+  AND V.SCLAVE !='BV3-23120165'
+and MCE.UIDESTATUSTARJETA = '1f752e96-0ecc-4765-b163-259865bfabf0'
+and MCE.UIDESTATUS = '5e879806-6e1d-4d5b-9610-25f2a681b637'
+GROUP BY TRUNC(NFC.DTFECHAOPERACION),
+         TRUNC(NFC.DTFECHACREACION),
+         CASE
+             WHEN NFC.IERROR = 0 THEN '0-Confirmada'
+             WHEN NFC.IERROR = 5 AND TOKENTRANSACCION != '00000000000000000000000000000000' THEN '5-Confirmada'
+             WHEN NFC.IERROR = 5 AND TOKENTRANSACCION = '00000000000000000000000000000000' THEN '5-Error en lectura'
+             WHEN NFC.IERROR = 1 THEN '1-Tarjeta expirada'
+             WHEN NFC.IERROR = 2 THEN '2-Sin saldo'
+             WHEN NFC.IERROR = 3 THEN '3-Deny list'
+             WHEN NFC.IERROR = 4 THEN '4-Tarjeta no soportada'
+             WHEN NFC.IERROR = 6 THEN '6-Falta configurar tarifa'
+             WHEN NFC.IERROR = 7 THEN '7-Error en recarga'
+             WHEN NFC.IERROR = 100 THEN '100-Tarjeta recargada'
+             ELSE 'Otro'
+             END;
+
+
+
+
+
+
+
+
+-- LIDERES
+------------------------------------------
+
+with base as (
+SELECT /*Monitoreo conteo de errores del dia*/
+    NFC.*,
+    CASE
+        WHEN NFC.IERROR = 0 THEN '0-Confirmada'
+        WHEN NFC.IERROR = 5 AND TOKENTRANSACCION != '00000000000000000000000000000000' THEN '5-Confirmada'
+        WHEN NFC.IERROR = 5 AND TOKENTRANSACCION = '00000000000000000000000000000000' THEN '5-Error en lectura'
+        WHEN NFC.IERROR = 1 THEN '1-Tarjeta expirada'
+        WHEN NFC.IERROR = 2 THEN '2-Sin saldo'
+        WHEN NFC.IERROR = 3 THEN '3-Deny list'--Tarjeta Bloqueada
+        WHEN NFC.IERROR = 4 THEN '4-Tarjeta no soportada'
+        WHEN NFC.IERROR = 6 THEN '6-Falta configurar tarifa'--Reportar con soporte
+        WHEN NFC.IERROR = 7 THEN '7-Error en recarga'
+        WHEN NFC.IERROR = 100 THEN '100-Tarjeta recargada'
+        ELSE 'Otro'
+        END                     AS ESTADOTRANSACCION
+--        ,COUNT(*)                    AS TOTAL_ERRORES
+FROM SINCRONIZADOR.DETALLESINCRONIZACIONTRANSACCIONESNFC NFC
+         INNER JOIN SINCRONIZADOR.MONEDERO M ON M.INUMEROTARJETA = NFC.INUMEROTARJETA AND M.INUMEROTARJETA > 0
+         LEFT JOIN SINCRONIZADOR.VALIDADORES V ON V.UIDVALIDADOR = NFC.UIDVALIDADOR
+-- LEFT JOIN SINCRONIZADOR.RUTAS R ON R.SCLAVERUTA = NFC.IRUTA
+-- LEFT JOIN CATALOGOS.AUTOBUSVALIDADOR AV ON AV.UIDVALIDADOR = V.UIDVALIDADOR AND AV.BACTIVO = 1
+-- LEFT JOIN SINCRONIZADOR.AUTOBUSES AU ON AU.UIDAUTOBUS = AV.UIDAUTOBUS
+WHERE TRUNC(NFC.DTFECHAOPERACION) >= trunc(CURRENT_TIMESTAMP)
+  AND NFC.IERROR = 7
+-- and NFC.IERROR IN (6) -- EN ESTA SECCION SE PUEDE COMENTAR O AGREGAR LOS ERROES A VISUALIZAR
+-- GROUP BY TRUNC(NFC.DTFECHAOPERACION),
+--          TRUNC(NFC.DTFECHACREACION),
+--          --NFC.STIPOTARIFA,
+--          CASE
+--              WHEN NFC.IERROR = 0 THEN '0-Confirmada'
+--              WHEN NFC.IERROR = 5 AND TOKENTRANSACCION != '00000000000000000000000000000000' THEN '5-Confirmada'
+--              WHEN NFC.IERROR = 5 AND TOKENTRANSACCION = '00000000000000000000000000000000' THEN '5-Error en lectura'
+--              WHEN NFC.IERROR = 1 THEN '1-Tarjeta expirada'
+--              WHEN NFC.IERROR = 2 THEN '2-Sin saldo'
+--              WHEN NFC.IERROR = 3 THEN '3-Deny list'
+--              WHEN NFC.IERROR = 4 THEN '4-Tarjeta no soportada'
+--              WHEN NFC.IERROR = 6 THEN '6-Falta configurar tarifa'
+--              WHEN NFC.IERROR = 7 THEN '7-Error en recarga'
+--              WHEN NFC.IERROR = 100 THEN '100-Tarjeta recargada'
+--              ELSE 'Otro'
+--              END;
+    )
+select * from base;
+;
+
+
+
+----------------------------------
+
+
+

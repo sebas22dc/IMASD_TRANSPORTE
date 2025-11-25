@@ -1,0 +1,129 @@
+-- SELECT
+--     ------------------------------------SECCION DE DWH
+--     M.UIDOPERACION                          UIDOPERACION,
+--     M.UIDTIPOTRANSACCION                    UIDTIPOTRANSACCION,
+--     'APP'                                   UIDCOMERCIO,
+--     TO_CHAR(M.DTFECHAOPERACION, 'yyyymmdd') FECHAKEY,
+--     TO_CHAR(M.DTFECHAOPERACION, 'yyyymmdd') TIEMPOKEY,
+--     M.UIDTIPOSMONEDERO                      UIDTIPOSMONEDERO,
+--     m.UIDTIPOMOVIMIENTO                     UIDTIPOMOVIMIENTO,
+--     m.IFOLIOMOVIMIENTO                      IFOLIOMOVIMIENTO,
+--     mon.INUMMONEDERO                        INUMMONEDERO,
+--     tf.UIDTIPOTARIFA                        UIDTIPOTARIFA,
+--     m.DMONTO                                DMONTO,
+--     1                                       Numtranx
+-- FROM MONEDEROCOMANDOS.MOVIMIENTOSESTADOSDECUENTA M
+--          LEFT JOIN CREDENCIALIZACION.TARJETAS T ON T.UIDMONEDERO = M.UIDMONEDERO
+--          LEFT JOIN MONEDEROCOMANDOS.MONEDERO MON ON MON.UIDMONEDERO = M.UIDMONEDERO
+--          LEFT JOIN CATALOGOS.TIPOTARIFAS TF ON TF.UIDTIPOTARIFA = MON.UIDTIPOTARIFA
+--          LEFT JOIN CATALOGOS.TIPOTRANSACCIONES TT ON TT.UIDTIPOTRANSACCION = M.UIDTIPOTRANSACCION
+--          LEFT JOIN CATALOGOS.TIPOSMONEDERO TM ON TM.UIDTIPOMONEDERO = M.UIDTIPOSMONEDERO
+--          LEFT JOIN CATALOGOS.TIPOMOVIMIENTOS TMOV ON TMOV.UIDTIPOMOVIMIENTO = M.UIDTIPOMOVIMIENTO
+--          LEFT JOIN COMERCIO.COMERCIOS C ON C.SCOMERCIO = M.SEMISOR
+--          LEFT JOIN PAGOS.ORDENES O ON O.UIDORDEN = M.UIDOPERACION
+-- WHERE M.UIDTIPOMOVIMIENTO = 'ef008eb7-ea41-46bb-814e-f94979913ceb'
+--   AND M.SEMISOR = 'APP'
+--   AND M.DMONTO > 0
+--   AND M.UIDOPERACION NOT IN (SELECT b.UIDOPERACION
+--                              FROM MONEDEROCOMANDOS.MOVIMIENTOSESTADOSDECUENTA a
+--                                       INNER JOIN (SELECT A.UIDOPERACION,
+--                                                          uidmonedero,
+--                                                          ifoliomovimiento,
+--                                                          trunc(dtfechaoperacion) fecha
+--                                                   FROM MONEDEROCOMANDOS.MOVIMIENTOSESTADOSDECUENTA a
+--                                                   WHERE SOBSERVACIONES != 'REVERSA OXXO WAY'
+--                                                     AND semisor IN ('CADENA COMERCIAL OXXO')) b
+--                                                  ON b.UIDMONEDERO = a.UIDMONEDERO AND
+--                                                     b.IFOLIOMOVIMIENTO = a.IFOLIOMOVIMIENTO AND
+--                                                     b.FECHA = trunc(A.dtfechacreacion)
+--                              WHERE SOBSERVACIONES = 'REVERSA OXXO WAY')
+--   AND (M.UIDTIPOOPERACION <> '786fd3c1-6d72-4801-8da8-b28e055eca49' or
+--        M.UIDTIPOOPERACION is null)
+--   and O.SCONCEPTO is not null
+--   AND trunc(m.DTFECHAOPERACION) >= trunc(to_date('22/08/25'))
+--   and trunc(m.DTFECHAOPERACION) < trunc(to_date('23/09/25'));
+--
+-- -----------------------------------------------------------------------------------------------------
+-- SELECT trunc(M.DTFECHAOPERACION),
+--        count(1),
+--        sum(M.DMONTO)
+-- ------------------------------------SECCION DE DWH
+-- --     M.UIDOPERACION UIDOPERACION,
+-- --     M.UIDTIPOTRANSACCION UIDTIPOTRANSACCION,
+-- --     'APP' UIDCOMERCIO,
+-- --   TO_CHAR(M.DTFECHAOPERACION, 'yyyymmdd')   FECHAKEY,
+-- --   TO_CHAR(M.DTFECHAOPERACION, 'yyyymmdd')   TIEMPOKEY,
+-- -- M.UIDTIPOSMONEDERO UIDTIPOSMONEDERO,
+-- -- m.UIDTIPOMOVIMIENTO UIDTIPOMOVIMIENTO,
+-- -- m.IFOLIOMOVIMIENTO IFOLIOMOVIMIENTO,
+-- -- mon.INUMMONEDERO INUMMONEDERO,
+-- -- tf.UIDTIPOTARIFA UIDTIPOTARIFA,
+-- -- m.DMONTO DMONTO,
+-- -- 1 Numtranx
+-- FROM MONEDEROCOMANDOS.MOVIMIENTOSESTADOSDECUENTA M
+--          LEFT JOIN CREDENCIALIZACION.TARJETAS T ON T.UIDMONEDERO = M.UIDMONEDERO
+--          LEFT JOIN MONEDEROCOMANDOS.MONEDERO MON ON MON.UIDMONEDERO = M.UIDMONEDERO
+--          LEFT JOIN CATALOGOS.TIPOTARIFAS TF ON TF.UIDTIPOTARIFA = MON.UIDTIPOTARIFA
+--          LEFT JOIN CATALOGOS.TIPOTRANSACCIONES TT ON TT.UIDTIPOTRANSACCION = M.UIDTIPOTRANSACCION
+--          LEFT JOIN CATALOGOS.TIPOSMONEDERO TM ON TM.UIDTIPOMONEDERO = M.UIDTIPOSMONEDERO
+--          LEFT JOIN CATALOGOS.TIPOMOVIMIENTOS TMOV ON TMOV.UIDTIPOMOVIMIENTO = M.UIDTIPOMOVIMIENTO
+--          LEFT JOIN COMERCIO.COMERCIOS C ON C.SCOMERCIO = M.SEMISOR
+--          LEFT JOIN PAGOS.ORDENES O ON O.UIDORDEN = M.UIDOPERACION
+-- WHERE M.UIDTIPOMOVIMIENTO = 'ef008eb7-ea41-46bb-814e-f94979913ceb'
+--   AND M.SEMISOR = 'APP'
+--   AND M.DMONTO > 0
+--   AND M.UIDOPERACION NOT IN (SELECT b.UIDOPERACION
+--                              FROM MONEDEROCOMANDOS.MOVIMIENTOSESTADOSDECUENTA a
+--                                       INNER JOIN (SELECT A.UIDOPERACION,
+--                                                          uidmonedero,
+--                                                          ifoliomovimiento,
+--                                                          trunc(dtfechaoperacion) fecha
+--                                                   FROM MONEDEROCOMANDOS.MOVIMIENTOSESTADOSDECUENTA a
+--                                                   WHERE SOBSERVACIONES != 'REVERSA OXXO WAY'
+--                                                     AND semisor IN ('CADENA COMERCIAL OXXO')) b
+--                                                  ON b.UIDMONEDERO = a.UIDMONEDERO AND
+--                                                     b.IFOLIOMOVIMIENTO = a.IFOLIOMOVIMIENTO AND
+--                                                     b.FECHA = trunc(A.dtfechacreacion)
+--                              WHERE SOBSERVACIONES = 'REVERSA OXXO WAY')
+--   AND (M.UIDTIPOOPERACION <> '786fd3c1-6d72-4801-8da8-b28e055eca49' or
+--        M.UIDTIPOOPERACION is null)
+--   and O.SCONCEPTO is not null
+--   AND trunc(m.DTFECHAOPERACION) >= trunc(to_date('01/09/25'))
+--   and trunc(m.DTFECHAOPERACION) < trunc(to_date('01/10/25'))
+--
+-- group by trunc(M.DTFECHAOPERACION);
+--
+--
+-- --------------------------------------------------------------------------------------------------
+-- select count(1)
+-- FROM MONEDEROCOMANDOS.MOVIMIENTOSESTADOSDECUENTA M
+-- WHERE M.UIDTIPOMOVIMIENTO = 'ef008eb7-ea41-46bb-814e-f94979913ceb'
+--   AND M.SEMISOR = 'APP'
+--   AND M.DMONTO > 0
+--   AND M.UIDOPERACION NOT IN (SELECT b.UIDOPERACION
+--                              FROM MONEDEROCOMANDOS.MOVIMIENTOSESTADOSDECUENTA a
+--                                       INNER JOIN (SELECT A.UIDOPERACION,
+--                                                          uidmonedero,
+--                                                          ifoliomovimiento,
+--                                                          trunc(dtfechaoperacion) fecha
+--                                                   FROM MONEDEROCOMANDOS.MOVIMIENTOSESTADOSDECUENTA a
+--                                                   WHERE SOBSERVACIONES != 'REVERSA OXXO WAY'
+--                                                     AND semisor IN ('CADENA COMERCIAL OXXO')) b
+--                                                  ON b.UIDMONEDERO = a.UIDMONEDERO AND
+--                                                     b.IFOLIOMOVIMIENTO = a.IFOLIOMOVIMIENTO AND
+--                                                     b.FECHA = trunc(A.dtfechacreacion)
+--                              WHERE SOBSERVACIONES = 'REVERSA OXXO WAY')
+--   AND (M.UIDTIPOOPERACION <> '786fd3c1-6d72-4801-8da8-b28e055eca49' or
+--        M.UIDTIPOOPERACION is null)
+--   AND trunc(m.DTFECHAOPERACION) >= trunc(to_date('22/08/25'))
+--   and trunc(m.DTFECHAOPERACION) < trunc(to_date('23/08/25'));
+
+
+---------------------------VERSION 2 CON CODI
+
+
+
+
+
+
+

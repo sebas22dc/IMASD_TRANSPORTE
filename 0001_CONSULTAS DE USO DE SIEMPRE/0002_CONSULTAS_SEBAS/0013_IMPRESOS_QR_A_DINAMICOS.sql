@@ -1,0 +1,205 @@
+-- SELECT *
+-- FROM SINCRONIZADOR.TRANSACCIONQRDINAMICO_CORRECCION_IMPRESO_A_DINAMICO;
+
+-- INSERT INTO SINCRONIZADOR.TRANSACCIONQRDINAMICO
+-- SELECT *
+-- FROM SINCRONIZADOR.TRANSACCIONQRDINAMICO_CORRECCION_IMPRESO_A_DINAMICO
+-- WHERE UIDSINCRONIZACION NOT IN (SELECT UIDSINCRONIZACION FROM SINCRONIZADOR.TRANSACCIONQRDINAMICO)
+-- ;
+--
+-- COMMIT;
+-- INSERT INTO SINCRONIZADOR.DETALLETRANSACCIONQRDINAMICO
+-- SELECT *
+-- FROM SINCRONIZADOR.DETALLETRANSACCIONQRDINAMICO_CORRECCION_IMPRESO_A_DINAMICO
+-- WHERE UIDSINCRONIZACION NOT IN (SELECT UIDSINCRONIZACION FROM SINCRONIZADOR.DETALLETRANSACCIONQRDINAMICO)
+-- ;
+
+MERGE INTO SINCRONIZADOR.TRANSACCIONQRDINAMICO_CORRECCION_IMPRESO_A_DINAMICO d
+USING (SELECT o.UIDSINCRONIZACION,
+              o.IDVALIDADOR,
+              o.DTFECHAHORAOPERACION,
+              1 INUMEROTRANSACCIONES,
+              o.SORIGINALREQUEST,
+              o.DTFECHACREACION,
+              o.DTFECHAULTMOD,
+              o.DTFECHABAJA,
+              o.BACTIVO,
+              o.BBAJA,
+              o.IIDUSUARIOCREACION,
+              o.IIDUSUARIOULTMOD,
+              o.IIDUSUARIOBAJA,
+              0 BPROCESADO,
+              0 BDUPLICADO
+       FROM SINCRONIZADOR.TRANSACCIONTICKETQR O
+       WHERE ICONSECUTIVO IN (SELECT T.ICONSECUTIVO
+                              FROM SINCRONIZADOR.TRANSACCIONTICKETQR t
+                                       INNER JOIN APPTICKETS.TICKET t2 ON t.ICONSECUTIVO = t2.INUMSEQUENCIAL
+                                       INNER JOIN TICKETS.TICKET_USADO tu
+                                                  ON t2.UIDTICKET = tu.UIDTICKET --SE HACE INNER JOIN A TICKET_USADO PARA OBTENER EL TIPO DE TICKET
+                                       INNER JOIN TICKETS.TIPOTICKET tt ON tu.UIDTIPOTICKET = tt.UIDTIPOTICKET
+                                       LEFT JOIN SINCRONIZADOR.DETALLETRANSACCIONQRDINAMICO d
+                                                 ON T.ICONSECUTIVO = D.ICONSECUTIVO --SE HACE LEFT JOIN AL DETALLE PARA VALIDAR QUE NO EXISTA EN EL CONSECUTIVO
+                              WHERE t.DTFECHAHORAOPERACION between
+                                  TO_DATE('01-11-2025 00:00:00', 'DD-MM-YYYY HH24:MI:SS') -- DEL DIA 14 DE NOVIEMBRE
+                                  AND
+                                  TO_DATE('19-11-2025 23:59:59', 'DD-MM-YYYY HH24:MI:SS')-- DEL DIA 14 DE NOVIEMBRE
+                                AND t.ICONSECUTIVO > 0
+                                AND tt.UIDTIPOTICKET = 'aaa73827-af56-4f44-961f-a1300b49b875' --SOLO LOS GUID TIPO APP QUE ESTEN REGISTRADOS EN QR IMPRESO
+                                AND tt.STIPO = 'APP' --SOLO LOS TIPO APP QUE ESTEN REGISTRADOS EN QR IMPRESO
+                                AND D.ICONSECUTIVO IS NULL -- QUE NO EXISTAN EN DETALLE DE QR IMPRESO
+       )
+    /**/
+) o
+ON (d.UIDSINCRONIZACION = o.UIDSINCRONIZACION)
+WHEN NOT MATCHED THEN
+    INSERT (UIDSINCRONIZACION,
+            IDVALIDADOR,
+            DTFECHAOPERACION,
+            INUMEROTRANSACCIONES,
+            SORIGINALREQUEST,
+            DTFECHACREACION,
+            DTFECHAULTMOD,
+            DTFECHABAJA,
+            BACTIVO,
+            BBAJA,
+            IIDUSUARIOCREACION,
+            IIDUSUARIOULTMOD,
+            IIDUSUARIOBAJA,
+            BPROCESADO,
+            BDUPLICADO)
+    VALUES (o.UIDSINCRONIZACION,
+            o.IDVALIDADOR,
+            o.DTFECHAHORAOPERACION,
+            1,
+            o.SORIGINALREQUEST,
+            o.DTFECHACREACION,
+            o.DTFECHAULTMOD,
+            o.DTFECHABAJA,
+            o.BACTIVO,
+            o.BBAJA,
+            o.IIDUSUARIOCREACION,
+            o.IIDUSUARIOULTMOD,
+            o.IIDUSUARIOBAJA,
+            0,
+            0);
+
+commit;
+--------------DETALLES
+
+
+select *
+from SINCRONIZADOR.DETALLETRANSACCIONQRDINAMICO_CORRECCION_IMPRESO_A_DINAMICO;
+
+--##ANTES DE EJECUTAR EL SCRIPT DEBE HABERSE CREADO LA CABECERA CON EL MISMO GUID UIDSINCRONIZACION QUE TENIA EN LOS IMPRESOS :
+MERGE INTO SINCRONIZADOR.DETALLETRANSACCIONQRDINAMICO_CORRECCION_IMPRESO_A_DINAMICO tgt
+USING (SELECT tqrestatic.UIDSINCRONIZACION,--DEBERA SER EL MISMO GUID QUE TENIA EN LOS IMPRESOS
+              tqrestatic.IDVALIDADOR                 UIDVALIDADOR,
+              tqrestatic.DTFECHAHORAOPERACION DTFECHAOPERACION,
+              m.INUMEROMONEDERO INUMEROTARJETA,
+              tqrestatic.DMONTOCOBRADO DMONTO,
+              (e.DSALDO - tqrestatic.DMONTOCOBRADO) DSALDO,--QUE SALDO LE PONDRIA??
+              t.INUMSEQUENCIAL                       ICONSECUTIVO,
+              t.DTFECHAVIGENCIA                      DTFECHAVIGENCIA,
+              tu.RUTA                                IRUTA,
+              0                                      BPROCESADO,
+              t.DTFECHACREACION                      DTFECHACREACION,
+              ''                                     DTFECHAULTMOD,
+              ''                                     DTFECHABAJA,
+              1                                      BACTIVO,
+              0                                      BBAJA,
+              '00000000-0000-0000-0000-000000000000' IIDUSUARIOCREACION,
+              '00000000-0000-0000-0000-000000000000' IIDUSUARIOULTMOD,
+              '00000000-0000-0000-0000-000000000000' IIDUSUARIOBAJA,
+              0                                      IREINTENTOS,
+              NULL                                   IDVALIDADOR,
+              tqrestatic.STOKEN                      STOKEN,
+              tqrestatic.SLONGITUD                   SLONGITUD,
+              tqrestatic.SLATITUD                    SLATITUD,
+              tqrestatic.TOKENTRANSACCION            TOKENTRANSACCION,
+              0                                      INUMEROTRANSBORDO,
+              0                                      IERROR, -- COMO SE IDENTIFICA LAS QUE NO TIENEN ERROR
+              0                                      BDEBITADO,
+              0                                      IREINTENTOTRANS
+       FROM APPTICKETS.TICKET t
+                INNER JOIN TICKETS.TICKET_USADO tu ON t.UIDTICKET = tu.UIDTICKET
+                INNER JOIN SINCRONIZADOR.TRANSACCIONTICKETQR tqrestatic ON T.INUMSEQUENCIAL = tqrestatic.ICONSECUTIVO
+                INNER JOIN SINCRONIZADOR.MONEDERO m ON t.UIDMONEDERO = m.UIDMONEDERO
+                INNER JOIN MONEDEROCONSULTAS.ESTADODECUENTA e ON m.UIDMONEDERO = e.UIDMONEDERO
+       WHERE T.INUMSEQUENCIAL IN --SOLO SE APLICARA A LOS SIGUIENTES CONSECUTIVOS
+             (SELECT T.ICONSECUTIVO
+              FROM SINCRONIZADOR.TRANSACCIONTICKETQR t
+                       INNER JOIN APPTICKETS.TICKET t2 ON t.ICONSECUTIVO = t2.INUMSEQUENCIAL
+                       INNER JOIN TICKETS.TICKET_USADO tu
+                                  ON t2.UIDTICKET = tu.UIDTICKET --SE HACE INNER JOIN A TICKET_USADO PARA OBTENER EL TIPO DE TICKET
+                       INNER JOIN TICKETS.TIPOTICKET tt ON tu.UIDTIPOTICKET = tt.UIDTIPOTICKET
+                       LEFT JOIN SINCRONIZADOR.DETALLETRANSACCIONQRDINAMICO d
+                                 ON T.ICONSECUTIVO = D.ICONSECUTIVO --SE HACE LEFT JOIN AL DETALLE PARA VALIDAR QUE NO EXISTA EN EL CONSECUTIVO
+              WHERE t.DTFECHAHORAOPERACION between
+                  TO_DATE('01-11-2025 00:00:00', 'DD-MM-YYYY HH24:MI:SS') -- DEL DIA 14 DE NOVIEMBRE
+                  AND
+                  TO_DATE('19-11-2025 23:59:59', 'DD-MM-YYYY HH24:MI:SS')-- DEL DIA 14 DE NOVIEMBRE
+                AND t.ICONSECUTIVO > 0
+                AND tt.UIDTIPOTICKET = 'aaa73827-af56-4f44-961f-a1300b49b875' --SOLO LOS GUID TIPO APP QUE ESTEN REGISTRADOS EN QR IMPRESO
+                AND tt.STIPO = 'APP' --SOLO LOS TIPO APP QUE ESTEN REGISTRADOS EN QR IMPRESO
+                AND D.ICONSECUTIVO IS NULL -- QUE NO EXISTAN EN DETALLE DE QR IMPRESO
+             )
+    /**/
+)
+    src
+ON (tgt.UIDSINCRONIZACION = src.UIDSINCRONIZACION AND tgt.ICONSECUTIVO = src.ICONSECUTIVO)
+WHEN NOT MATCHED THEN
+    INSERT (UIDDETALLESINCRONIZADOR,
+            UIDSINCRONIZACION,
+            UIDVALIDADOR,
+            DTFECHAOPERACION,
+            INUMEROTARJETA,
+            DMONTO,
+            DSALDO,
+            ICONSECUTIVO,
+            DTFECHAVIGENCIA,
+            IRUTA,
+            BPROCESADO,
+            DTFECHACREACION,
+            DTFECHAULTMOD,
+            DTFECHABAJA,
+            BACTIVO,
+            BBAJA,
+            IIDUSUARIOCREACION,
+            IIDUSUARIOULTMOD,
+            IIDUSUARIOBAJA,
+            IREINTENTOS,
+            IDVALIDADOR,
+            STOKEN,
+            SLONGITUD,
+            SLATITUD,
+            TOKENTRANSACCION,
+            INUMEROTRANSBORDO)
+    VALUES (lower(SUBSTR(RAWTOHEX(SYS_GUID()), 1, 8) || '-' || SUBSTR(RAWTOHEX(SYS_GUID()), 9, 4) || '-' ||
+                  SUBSTR(RAWTOHEX(SYS_GUID()), 13, 4) || '-' || SUBSTR(RAWTOHEX(SYS_GUID()), 17, 4) || '-' ||
+                  SUBSTR(RAWTOHEX(SYS_GUID()), 21)),
+            src.UIDSINCRONIZACION,
+            src.UIDVALIDADOR,
+            src.DTFECHAOPERACION,
+            src.INUMEROTARJETA,
+            src.DMONTO,
+            src.DSALDO,
+            src.ICONSECUTIVO,
+            src.DTFECHAVIGENCIA,
+            src.IRUTA,
+            src.BPROCESADO,
+            src.DTFECHACREACION,
+            src.DTFECHAULTMOD,
+            src.DTFECHABAJA,
+            src.BACTIVO,
+            src.BBAJA,
+            src.IIDUSUARIOCREACION,
+            src.IIDUSUARIOULTMOD,
+            src.IIDUSUARIOBAJA,
+            src.IREINTENTOS,
+            src.IDVALIDADOR,
+            src.STOKEN,
+            src.SLONGITUD,
+            src.SLATITUD,
+            src.TOKENTRANSACCION,
+            src.INUMEROTRANSBORDO);
+-- commit
